@@ -88,7 +88,7 @@ final class MobileDrome
         mScreenHeight = pHeight;
         
         mDromeWidth = round( pWidth, mColumnCount );
-        mDromeHeight = round( pHeight - 3 * TEXT_HEIGHT, mRowCount );
+        mDromeHeight = round( pHeight - 2 * TEXT_HEIGHT, mRowCount );
         
         mDromeOffsetX = ( mScreenWidth - mDromeWidth ) / 2;
         mDromeOffsetY = 0;
@@ -131,27 +131,12 @@ final class MobileDrome
 
         drawDudes( g );
         mPointer.draw( g );
+        drawFinishedString( g );
 
         g.translate( -mDromeOffsetX - DROME_THICKNESS,
                      -mDromeOffsetY - DROME_THICKNESS );
-
-        if ( mFinishedString != null )
-        {
-            final int stringWidth = g.getFont()
-                                     .stringWidth( mFinishedString );
-            g.setColor( Resources.COLOR_BG_OTHER );
-            g.fillRect( ( ( mScreenWidth - stringWidth ) / 2 ) - 1,
-                        mDromeHeight + 1,
-                        stringWidth + 2,
-                        TEXT_HEIGHT );
-            g.setColor( Resources.COLOR_TEXT );
-            g.drawString( mFinishedString,
-                          ( mScreenWidth - stringWidth ) / 2,
-                          mDromeHeight + 2,
-                          Graphics.TOP | Graphics.LEFT );
-        }
     }
-	
+
     private final void redrawScreen( final Graphics g )
     {
         // Clear background
@@ -208,6 +193,28 @@ final class MobileDrome
                       rightX,
                       bottomY,
                       Graphics.BOTTOM | Graphics.RIGHT );
+    }
+    
+    private final void drawFinishedString( final Graphics g )
+    {
+        if ( mFinishedString != null )
+        {
+            final int stringWidth = g.getFont()
+                                     .stringWidth( mFinishedString );
+            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - 1;
+            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - 1;
+            
+            g.setColor( Resources.COLOR_BG_DROME );
+            g.fillRect( leftX,
+                        topY,
+                        stringWidth + 2,
+                        TEXT_HEIGHT );
+            g.setColor( Resources.COLOR_TEXT );
+            g.drawString( mFinishedString,
+                          leftX + 1,
+                          topY + 1,
+                          Graphics.TOP | Graphics.LEFT );
+        }
     }
 
     private final void drawDudes( final Graphics pGraphics )
