@@ -37,9 +37,9 @@ final class MobileDrome
     private int mDromeWidth;
     private int mDromeHeight;
 
-    private short mScoreLevel = 0;
-    private short mScoreTotal = 0;
-    private byte mRemoveCountLevel = 0;
+    private int mScoreLevel = 0;
+    private int mScoreTotal = 0;
+    private int mRemoveCountLevel = 0;
     
     private final MobileHallOfFame mHOF = new MobileHallOfFame( this );
 

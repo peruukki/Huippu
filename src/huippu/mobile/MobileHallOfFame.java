@@ -39,32 +39,32 @@ final class MobileHallOfFame extends HallOfFame
         readFromStore();
     }
     
-    public final boolean addScoreLevel( final short pScore )
+    public final boolean addScoreLevel( final int pScore )
     {
         final boolean added = super.addScoreLevel( pScore );
         if ( added )
         {
-            writeToStoreShort( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
+            writeToStoreInt( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
         }
         return added;
     }
     
-    public final boolean addScoreTotal( final short pScore )
+    public final boolean addScoreTotal( final int pScore )
     {
         final boolean added = super.addScoreTotal( pScore );
         if ( added )
         {
-            writeToStoreShort( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
+            writeToStoreInt( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
         }
         return added;
     }
     
-    public final boolean addRemovesLevel( final byte pCount )
+    public final boolean addRemovesLevel( final int pCount )
     {
         final boolean added = super.addRemovesLevel( pCount );
         if ( added )
         {
-            writeToStoreByte( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
+            writeToStoreInt( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
         }
         return added;
     }
@@ -78,9 +78,9 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void writeToStore()
     {
-        writeToStoreShort( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
-        writeToStoreShort( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
-        writeToStoreByte( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
+        writeToStoreInt( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
+        writeToStoreInt( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
+        writeToStoreInt( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
     }
     
     private static final boolean addRecordToStore( final RecordStore pStore,
@@ -132,8 +132,8 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private static final boolean writeToStoreShort( final String pStoreName,
-                                                    final short[] pValues )
+    private static final boolean writeToStoreInt( final String pStoreName,
+                                                  final int[] pValues )
     {
         boolean success = false;
         
@@ -144,18 +144,18 @@ final class MobileHallOfFame extends HallOfFame
             {
                 for ( int i = 0; i < pValues.length; i++ )
                 {
-                    final byte[] data = getDataShort( pValues[ i ] );
+                    final byte[] data = getDataInt( pValues[ i ] );
                     store.setRecord( i + 1, data, 0, data.length );
                 }
                 success = true;
             }
             catch ( final IOException e )
             {
-                MobileMain.error( "Failed to get short data", e );
+                MobileMain.error( "Failed to get int data", e );
             }
             catch ( final RecordStoreException e )
             {
-                MobileMain.error(   "Failed to write short data to store "
+                MobileMain.error(   "Failed to write int data to store "
                                   + pStoreName, e );
             }
             finally
@@ -167,104 +167,36 @@ final class MobileHallOfFame extends HallOfFame
         return success;
     }
     
-    private static final boolean writeToStoreByte( final String pStoreName,
-                                                   final byte[] pValues )
-    {
-        boolean success = false;
-        
-        final RecordStore store = openStore( pStoreName );
-        if ( store != null )
-        {
-            try
-            {
-                for ( int i = 0; i < pValues.length; i++ )
-                {
-                    final byte[] data = getDataByte( pValues[ i ] );
-                    store.setRecord( i + 1, data, 0, data.length );
-                }
-                success = true;
-            }
-            catch ( final IOException e )
-            {
-                MobileMain.error( "Failed to get byte data", e );
-            }
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to write byte data to store "
-                                  + pStoreName, e );
-            }
-            finally
-            {
-                closeStore( store );
-            }
-        }
-        
-        return success;
-    }
-    
-    private static final boolean initializeStoreShort( final RecordStore pStore,
-                                                       final short[] pValues )
+    private static final boolean initializeStoreInt( final RecordStore pStore,
+                                                     final int[] pValues )
     {
         boolean success = true;
         try
         {
             for ( int i = 0; success && i < pValues.length; i++ )
             {
-                success = addRecordToStore( pStore, getDataShort( pValues[ i ] ) );
+                success = addRecordToStore( pStore, getDataInt( pValues[ i ] ) );
             }
         }
         catch ( final IOException e )
         {
-            MobileMain.error( "Failed to get short data", e );
+            MobileMain.error( "Failed to get int data", e );
             success = false;
         }
         return success;
     }
     
-    private static final boolean initializeStoreByte( final RecordStore pStore,
-                                                      final byte[] pValues )
-    {
-        boolean success = true;
-        try
-        {
-            for ( int i = 0; success && i < pValues.length; i++ )
-            {
-                success = addRecordToStore( pStore, getDataByte( pValues[ i ] ) );
-            }
-        }
-        catch ( final IOException e )
-        {
-            MobileMain.error( "Failed to get byte data", e );
-            success = false;
-        }
-        return success;
-    }
-    
-    private static final byte[] getDataShort( final short pValue )
+    private static final byte[] getDataInt( final int pValue )
         throws IOException
     {
         final byte[] data;
         
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final DataOutputStream dos = new DataOutputStream( baos );
-        dos.writeShort( pValue );
+        dos.writeInt( pValue );
         data = baos.toByteArray();
         dos.close();
         
-        return data;
-    }
-    
-    private static final byte[] getDataByte( final byte pValue )
-        throws IOException
-    {
-        final byte[] data;
-    
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream( baos );
-        dos.writeByte( pValue );
-        data = baos.toByteArray();
-        dos.close();
-    
         return data;
     }
     
@@ -331,20 +263,7 @@ final class MobileHallOfFame extends HallOfFame
     }
 
     private static final void addValues( final Form pForm,
-                                         final short[] pValues )
-    {
-        final int size = pValues.length;
-        for( int i = 0; i < size; i++ )
-        {
-            addItem( pForm,
-                     String.valueOf( i + 1 ),
-                     String.valueOf( pValues[ i ] ),
-                     true );
-        }
-    }
-    
-    private static final void addValues( final Form pForm,
-                                         final byte[] pValues )
+                                         final int[] pValues )
     {
         final int size = pValues.length;
         for( int i = 0; i < size; i++ )
@@ -373,11 +292,11 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_SCORES_LEVEL, true );
             if ( mStoreScoresLevel.getNumRecords () == 0 )
             {
-                initializeStoreShort( mStoreScoresLevel, mScoresLevel.getValues() );
+                initializeStoreInt( mStoreScoresLevel, mScoresLevel.getValues() );
             }
             else
             {
-                mScoresLevel.setValues( readValuesShort( mStoreScoresLevel,
+                mScoresLevel.setValues( readValuesInt( mStoreScoresLevel,
                                                          mScoresLevel.size() ) );
             }
         }        
@@ -410,11 +329,11 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_SCORES_TOTAL, true );
             if ( mStoreScoresTotal.getNumRecords () == 0 )
             {
-                initializeStoreShort( mStoreScoresTotal, mScoresTotal.getValues() );
+                initializeStoreInt( mStoreScoresTotal, mScoresTotal.getValues() );
             }
             else
             {
-                mScoresTotal.setValues( readValuesShort( mStoreScoresTotal,
+                mScoresTotal.setValues( readValuesInt( mStoreScoresTotal,
                                                          mScoresTotal.size() ) );
             }
         }        
@@ -447,12 +366,12 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_REMOVES_LEVEL, true );
             if ( mStoreRemovesLevel.getNumRecords () == 0 )
             {
-                initializeStoreByte( mStoreRemovesLevel, mRemovesLevel.getValues() );
+                initializeStoreInt( mStoreRemovesLevel, mRemovesLevel.getValues() );
             }
             else
             {
-                mRemovesLevel.setValues( readValuesByte( mStoreRemovesLevel,
-                                                         mRemovesLevel.size() ) );
+                mRemovesLevel.setValues( readValuesInt( mStoreRemovesLevel,
+                                                        mRemovesLevel.size() ) );
             }
         }        
         catch ( final RecordStoreException e )
@@ -476,11 +395,11 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private static final short[] readValuesShort( final RecordStore pStore,
-                                                  final int pValueCount )
+    private static final int[] readValuesInt( final RecordStore pStore,
+                                              final int pValueCount )
         throws RecordStoreException
     {
-        short[] values = new short[ pValueCount ];
+        final int[] values = new int[ pValueCount ];
         
         for ( int i = 0; i < values.length; i++ )
         {
@@ -489,40 +408,12 @@ final class MobileHallOfFame extends HallOfFame
            {
                try
                {
-                   values[ i ] = dis.readShort();
+                   values[ i ] = dis.readInt();
                    dis.close();
                }
                catch ( final IOException e )
                {
-                   MobileMain.error(   "Failed to read short values from store "
-                                     + pStore, e );
-               }
-            }
-        }
-        
-        return values;
-    }
-    
-    
-    private static final byte[] readValuesByte( final RecordStore pStore,
-                                                final int pValueCount )
-        throws RecordStoreException
-    {
-        byte[] values = new byte[ pValueCount ];
-        
-        for ( int i = 0; i < values.length; i++ )
-        {
-           final DataInputStream dis = getDataStream( pStore, i + 1 );
-           if ( dis != null )
-           {
-               try
-               {
-                   values[ i ] = dis.readByte();
-                   dis.close();
-               }
-               catch ( final IOException e )
-               {
-                   MobileMain.error(   "Failed to read byte values from store "
+                   MobileMain.error(   "Failed to read int values from store "
                                      + pStore, e );
                }
             }

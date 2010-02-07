@@ -4,31 +4,26 @@ public final class Scores
 {
     private static final boolean mUseAllZero = true;
     
-    private static final short[] mScoresTotal = new short[]
+    private static final int[] mScoresTotal = new int[]
     {
         50, 40, 30, 20, 10
     };
     
-    private static final short[] mScoresLevel = new short[]
+    private static final int[] mScoresLevel = new int[]
     {
         20, 19, 18, 17, 0
     };
-
-    private static final float[] mRemovesAvg = new float[]
-    {
-        (float) 18.0, (float) 19.0, (float) 20.0, (float) 21.0, (float) 22.0
-    };
     
-    private static final byte[] mRemovesLevel = new byte[]
+    private static final int[] mRemovesLevel = new int[]
     {
         11, 12, 13, 14, 0
     };
     
-    static final short[] getInitialScoresTotal()
+    static final int[] getInitialScoresTotal()
     {
         if ( mUseAllZero )
         {
-            return new short[ mScoresTotal.length ];
+            return new int[ mScoresTotal.length ];
         }
         else
         {
@@ -36,11 +31,11 @@ public final class Scores
         }
     }
     
-    static final short[] getInitialScoresLevel()
+    static final int[] getInitialScoresLevel()
     {
         if ( mUseAllZero )
         {
-            return new short[ mScoresLevel.length ];
+            return new int[ mScoresLevel.length ];
         }
         else
         {
@@ -48,23 +43,11 @@ public final class Scores
         }
     }
     
-    static final float[] getInitialRemovesAvg()
+    static final int[] getInitialRemovesLevel()
     {
         if ( mUseAllZero )
         {
-            return new float[ mRemovesAvg.length ];
-        }
-        else
-        {
-            return mRemovesAvg;
-        }
-    }
-    
-    static final byte[] getInitialRemovesLevel()
-    {
-        if ( mUseAllZero )
-        {
-            return new byte[ mRemovesLevel.length ];
+            return new int[ mRemovesLevel.length ];
         }
         else
         {
