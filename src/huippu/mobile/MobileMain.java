@@ -1,8 +1,5 @@
 package huippu.mobile;
 
-import java.io.PrintStream;
-import java.io.Writer;
-
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Command;

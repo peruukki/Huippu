@@ -271,25 +271,7 @@ final class MobileHallOfFame extends HallOfFame
     public void clearAll()
     {
         super.clearAll();
-        
-//        deleteStore( STORE_SCORES_LEVEL );
-//        deleteStore( STORE_SCORES_TOTAL );
-//        deleteStore( STORE_REMOVES_LEVEL );
-//        deleteStore( STORE_REMOVES_AVG );
-        
         writeToStore();
-    }
-    
-    private static void deleteStore( final String pStoreName )
-    {
-        try
-        {
-            RecordStore.deleteRecordStore( pStoreName );
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error( "Failed to delete store " + pStoreName, e );
-        }
     }
     
     public void showHallOfFame()
