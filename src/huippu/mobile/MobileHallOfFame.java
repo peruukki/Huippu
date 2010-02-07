@@ -31,7 +31,6 @@ final class MobileHallOfFame extends HallOfFame
     private RecordStore mStoreScoresLevel;
     private RecordStore mStoreScoresTotal;
     private RecordStore mStoreRemovesLevel;
-    private RecordStore mStoreRemovesAvg;
     
     public MobileHallOfFame( final MobileDrome pDrome )
     {
@@ -70,23 +69,11 @@ final class MobileHallOfFame extends HallOfFame
         return added;
     }
     
-    public final boolean addRemovesAvg( final float pAvg )
-    {
-        final boolean added = super.addRemovesAvg( pAvg );
-        if ( added )
-        {
-            writeToStoreFloat( STORE_REMOVES_AVG, mRemovesAvg.getValues() );
-        }
-        return added;
-    }
-    
-    
     private final void readFromStore()
     {
         readScoresLevel();
         readScoresTotal();
         readRemovesLevel();
-        readRemovesAvg();
     }
     
     private final void writeToStore()
@@ -94,7 +81,6 @@ final class MobileHallOfFame extends HallOfFame
         writeToStoreShort( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
         writeToStoreShort( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
         writeToStoreByte( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
-        writeToStoreFloat( STORE_REMOVES_AVG, mRemovesAvg.getValues() );
     }
     
     private static final boolean addRecordToStore( final RecordStore pStore,
@@ -216,41 +202,6 @@ final class MobileHallOfFame extends HallOfFame
         return success;
     }
     
-    private static final boolean writeToStoreFloat( final String pStoreName,
-                                                    final float[] pValues )
-    {
-        boolean success = false;
-        
-        final RecordStore store = openStore( pStoreName );
-        if ( store != null )
-        {
-            try
-            {
-                for ( int i = 0; i < pValues.length; i++ )
-                {
-                    final byte[] data = getDataFloat( pValues[ i ] );
-                    store.setRecord( i + 1, data, 0, data.length );
-                }
-                success = true;
-            }
-            catch ( final IOException e )
-            {
-                MobileMain.error( "Failed to get float data", e );
-            }
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to write byte float to store "
-                                  + pStoreName, e );
-            }
-            finally
-            {
-                closeStore( store );
-            }
-        }
-        
-        return success;
-    }
-    
     private static final boolean initializeStoreShort( final RecordStore pStore,
                                                        final short[] pValues )
     {
@@ -288,25 +239,6 @@ final class MobileHallOfFame extends HallOfFame
         }
         return success;
     }
-
-    private static final boolean initializeStoreFloat( final RecordStore pStore,
-                                                       final float[] pValues )
-    {
-        boolean success = true;
-        try
-        {
-            for ( int i = 0; success && i < pValues.length; i++ )
-            {
-                success = addRecordToStore( pStore, getDataFloat( pValues[ i ] ) );
-            }
-        }
-        catch ( final IOException e )
-        {
-            MobileMain.error( "Failed to get float data", e );
-            success = false;
-        }
-        return success;
-    }
     
     private static final byte[] getDataShort( final short pValue )
         throws IOException
@@ -330,20 +262,6 @@ final class MobileHallOfFame extends HallOfFame
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final DataOutputStream dos = new DataOutputStream( baos );
         dos.writeByte( pValue );
-        data = baos.toByteArray();
-        dos.close();
-    
-        return data;
-    }
-    
-    private static final byte[] getDataFloat( final float pValue )
-        throws IOException
-    {
-        final byte[] data;
-    
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream( baos );
-        dos.writeUTF( Float.toString( pValue ) );
         data = baos.toByteArray();
         dos.close();
     
@@ -420,8 +338,6 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void addRemoves()
     {
-        addTitle( mForm, Resources.TITLE_REMOVES_AVG );
-        addValues( mForm, mRemovesAvg.getValues() );
         addTitle( mForm, Resources.TITLE_REMOVES_LEVEL );
         addValues( mForm, mRemovesLevel.getValues() );
     }
@@ -434,19 +350,6 @@ final class MobileHallOfFame extends HallOfFame
 
     private static final void addValues( final Form pForm,
                                          final short[] pValues )
-    {
-        final int size = pValues.length;
-        for( int i = 0; i < size; i++ )
-        {
-            addItem( pForm,
-                     String.valueOf( i + 1 ),
-                     String.valueOf( pValues[ i ] ),
-                     true );
-        }
-    }
-    
-    private static final void addValues( final Form pForm,
-                                         final float[] pValues )
     {
         final int size = pValues.length;
         for( int i = 0; i < size; i++ )
@@ -591,43 +494,6 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private final void readRemovesAvg()
-    {
-        try
-        {
-            mStoreRemovesAvg =
-                RecordStore.openRecordStore( STORE_REMOVES_AVG, true );
-            if ( mStoreRemovesAvg.getNumRecords () == 0 )
-            {
-                initializeStoreFloat( mStoreRemovesAvg, mRemovesAvg.getValues() );
-            }
-            else
-            {
-                mRemovesAvg.setValues( readValuesFloat( mStoreRemovesAvg,
-                                                        mRemovesAvg.size() ) );
-            }
-        }        
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to read from store "
-                              + STORE_REMOVES_AVG, e );
-        }
-        
-        try
-        {
-            mStoreRemovesAvg.closeRecordStore();
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to close store "
-                              + STORE_REMOVES_AVG, e );
-        }
-        finally
-        {
-            mStoreRemovesAvg = null;
-        }
-    }
-    
     private static final short[] readValuesShort( final RecordStore pStore,
                                                   final int pValueCount )
         throws RecordStoreException
@@ -675,41 +541,6 @@ final class MobileHallOfFame extends HallOfFame
                catch ( final IOException e )
                {
                    MobileMain.error(   "Failed to read byte values from store "
-                                     + pStore, e );
-               }
-            }
-        }
-        
-        return values;
-    }
-    
-    private static final float[] readValuesFloat( final RecordStore pStore,
-                                                  final int pValueCount )
-        throws RecordStoreException
-    {
-        float[] values = new float[ pValueCount ];
-        
-        for ( int i = 0; i < values.length; i++ )
-        {
-           final DataInputStream dis = getDataStream( pStore, i + 1 );
-           if ( dis != null )
-           {
-               try
-               {
-                   final String value = dis.readUTF();
-                   try
-                   {
-                       values[ i ] = Float.parseFloat( value );
-                   }
-                   catch ( final NumberFormatException e )
-                   {
-                       MobileMain.error( "Read invalid float value " + value, e );
-                   }
-                   dis.close();
-               }
-               catch ( final IOException e )
-               {
-                   MobileMain.error(   "Failed to read float values from store "
                                      + pStore, e );
                }
             }

@@ -39,10 +39,7 @@ final class MobileDrome
 
     private short mScoreLevel = 0;
     private short mScoreTotal = 0;
-    
     private byte mRemoveCountLevel = 0;
-    private short mRemoveCountTotal = 0;
-    private float mRemoveCountAvg = (float) 0.0;
     
     private final MobileHallOfFame mHOF = new MobileHallOfFame( this );
 
@@ -178,13 +175,7 @@ final class MobileDrome
         final int bottomY = mScreenHeight - 1;
         final int leftX = TEXT_OFFSET;
         final int rightX = mScreenWidth - TEXT_OFFSET;
-        
-        // Display level
         g.setColor( Resources.COLOR_TEXT );
-        g.drawString( Resources.TEXT_LEVEL + mLevel,
-                      leftX,
-                      bottomY - 2 * TEXT_HEIGHT,
-                      Graphics.BOTTOM | Graphics.LEFT );
 
         // Display level score
         g.drawString( Resources.TEXT_SCORE_LEVEL + mScoreLevel,
@@ -206,14 +197,14 @@ final class MobileDrome
 //                      bottomY - 2 * TEXT_HEIGHT,
 //                      Graphics.BOTTOM | Graphics.RIGHT );
         
-        // Display remove count
-        g.drawString( Resources.TEXT_REMOVES_LEVEL + mRemoveCountLevel,
+        // Display level
+        g.drawString( Resources.TEXT_LEVEL + mLevel,
                       rightX,
                       bottomY - TEXT_HEIGHT,
                       Graphics.BOTTOM | Graphics.RIGHT );
-
-        // Display remove average
-        g.drawString( Resources.TEXT_REMOVES_AVG + mRemoveCountAvg,
+        
+        // Display remove count
+        g.drawString( Resources.TEXT_REMOVES_LEVEL + mRemoveCountLevel,
                       rightX,
                       bottomY,
                       Graphics.BOTTOM | Graphics.RIGHT );
@@ -292,7 +283,6 @@ final class MobileDrome
                     mScoreLevel += increment;
                     mScoreTotal += increment;
                     mRemoveCountLevel++;
-                    mRemoveCountTotal++;
                     
                     if ( mDudeGrid.allDudesRemoved() )
                     {
@@ -339,7 +329,6 @@ final class MobileDrome
             
             if ( pSuccess )
             {
-                mRemoveCountAvg = ( (float) mRemoveCountTotal ) / mLevel;
                 mFinishedString = Resources.TEXT_FINISHED_SUCCESS;
                 mMenu.setNextLevelEnabled( true );
             }
@@ -361,7 +350,6 @@ final class MobileDrome
     private final void updateTotalStats()
     {
         mHOF.addScoreTotal( mScoreTotal );
-        mHOF.addRemovesAvg( mRemoveCountAvg );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
@@ -382,8 +370,6 @@ final class MobileDrome
     {
         reinit();
         mScoreTotal = 0;
-        mRemoveCountTotal = 0;
-        mRemoveCountAvg = (float) 0.0;
         mLevel = 1;
         repaint();
     }
