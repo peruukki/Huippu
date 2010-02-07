@@ -21,9 +21,9 @@ final class MobileHallOfFame extends HallOfFame
     implements CommandListener
 {
     private final Command mCmdOK =
-        new Command( Resources.TEXT_RETURN, Command.OK, 1 );
+        new Command( Resources.TEXT_RETURN, Command.BACK, 1 );
     private final Command mCmdReset =
-        new Command( Resources.TEXT_RESET_HOF, Command.CANCEL, 2 );
+        new Command( Resources.TEXT_RESET_HOF, Command.SCREEN, 2 );
     
     private final MobileDrome mDrome;
     private Form mForm;

@@ -24,8 +24,8 @@ public final class Resources
     public static final String TEXT_NEXT_LEVEL = "Seuraava taso";
     public static final String TEXT_EXIT = "Poistu";
     public static final String TEXT_VIEW_HOF = "Huipputulokset";
-    public static final String TEXT_RETURN = "Takaisin";
-    public static final String TEXT_RESET_HOF = "Nollaa tulokset";
+    public static final String TEXT_RETURN = "Edell.";
+    public static final String TEXT_RESET_HOF = "Nollaa";
     
     // Title texts
     public static final String TITLE_HOF = "Huipputulokset";
