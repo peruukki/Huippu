@@ -3,22 +3,24 @@ package huippu.common;
 public class StoreIntAscending
     extends StoreInt
 {
-    public StoreIntAscending( final int[] pInitialValues )
+    public StoreIntAscending( final Score[] pInitialValues )
     {
         super( pInitialValues );
     }
 
-    protected final int getIndexToAdd( final int pValue )
+    protected final int getIndexToAdd( final Score pValue )
     {
         int index = -1;
 
-        if ( pValue != 0 )
+        final int newValue = pValue.getValue();
+        if ( newValue != 0 )
         {
             index = 0;
             for ( int i = mValues.length - 1; index == 0 && i >= 0; i-- )
             {
-                if (    mValues[ i ] != 0
-                     && pValue > mValues[ i ] )
+                final int existingValue = mValues[ i ].getValue();
+                if (    existingValue != 0
+                     && newValue > existingValue )
                 {
                     index = i + 1;
                 }

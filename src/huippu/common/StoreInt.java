@@ -2,14 +2,14 @@ package huippu.common;
 
 public abstract class StoreInt
 {
-    final protected int[] mValues;
+    final protected Score[] mValues;
     
-    public StoreInt( final int[] pInitialValues )
+    public StoreInt( final Score[] pInitialValues )
     {
         mValues = pInitialValues;
     }
     
-    public final boolean addValue( final int pValue )
+    public final boolean addValue( final Score pValue )
     {
         final int index = getIndexToAdd( pValue );
         if ( index != -1 )
@@ -19,12 +19,12 @@ public abstract class StoreInt
         return index != -1;
     }
     
-    public final int[] getValues()
+    public final Score[] getValues()
     {
         return mValues;
     }
     
-    public final void setValues( final int[] pValues )
+    public final void setValues( final Score[] pValues )
     {
         for ( int i = 0; i < mValues.length; i++ )
         {
@@ -36,7 +36,7 @@ public abstract class StoreInt
     {
         for ( int i = 0; i < mValues.length; i++ )
         {
-            mValues[ i ] = 0;
+            mValues[ i ] = new Score();
         }
     }
     
@@ -45,7 +45,7 @@ public abstract class StoreInt
         return mValues.length;
     }
     
-    private final void addToIndex( final int pValue, final int pIndex )
+    private final void addToIndex( final Score pValue, final int pIndex )
     {
         for ( int i = mValues.length - 1; i > pIndex; i-- )
         {
@@ -54,5 +54,5 @@ public abstract class StoreInt
         mValues[ pIndex ] = pValue;
     }
     
-    protected abstract int getIndexToAdd( final int pValue );
+    protected abstract int getIndexToAdd( final Score pValue );
 }

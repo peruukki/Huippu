@@ -2,6 +2,7 @@ package huippu.mobile;
 
 import huippu.common.Cell;
 import huippu.common.Resources;
+import huippu.common.Score;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
@@ -41,7 +42,7 @@ final class MobileDrome
     private int mScoreTotal = 0;
     private int mRemoveCountLevel = 0;
     
-    private final MobileHallOfFame mHOF = new MobileHallOfFame( this );
+    private final MobileHallOfFame mHOF = new MobileHallOfFame( this, FONT );
 
     private int mLevel = 1;
     
@@ -356,15 +357,15 @@ final class MobileDrome
     
     private final void updateTotalStats()
     {
-        mHOF.addScoreTotal( mScoreTotal );
+        mHOF.addScoreTotal( new Score( mScoreTotal, mLevel ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
     {
-        mHOF.addScoreLevel( mScoreLevel );
+        mHOF.addScoreLevel( new Score( mScoreLevel, mLevel ) );
         if ( pSuccess )
         {
-            mHOF.addRemovesLevel( mRemoveCountLevel );
+            mHOF.addRemovesLevel( new Score( mRemoveCountLevel, mLevel ) );
         }
     }
     

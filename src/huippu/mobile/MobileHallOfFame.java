@@ -2,18 +2,19 @@ package huippu.mobile;
 
 import huippu.common.HallOfFame;
 import huippu.common.Resources;
+import huippu.common.Score;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Screen;
+import javax.microedition.lcdui.StringItem;
 import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 
@@ -26,20 +27,22 @@ final class MobileHallOfFame extends HallOfFame
         new Command( Resources.TEXT_RESET_HOF, Command.SCREEN, 2 );
     
     private final MobileDrome mDrome;
+    private final int mScoreWidth;
     private Form mForm;
     
     private RecordStore mStoreScoresLevel;
     private RecordStore mStoreScoresTotal;
     private RecordStore mStoreRemovesLevel;
     
-    public MobileHallOfFame( final MobileDrome pDrome )
+    public MobileHallOfFame( final MobileDrome pDrome, final Font pFont )
     {
         super();
         mDrome = pDrome;
+        mScoreWidth = 5 * pFont.charWidth( '0' );
         readFromStore();
     }
     
-    public final boolean addScoreLevel( final int pScore )
+    public final boolean addScoreLevel( final Score pScore )
     {
         final boolean added = super.addScoreLevel( pScore );
         if ( added )
@@ -49,7 +52,7 @@ final class MobileHallOfFame extends HallOfFame
         return added;
     }
     
-    public final boolean addScoreTotal( final int pScore )
+    public final boolean addScoreTotal( final Score pScore )
     {
         final boolean added = super.addScoreTotal( pScore );
         if ( added )
@@ -59,9 +62,9 @@ final class MobileHallOfFame extends HallOfFame
         return added;
     }
     
-    public final boolean addRemovesLevel( final int pCount )
+    public final boolean addRemovesLevel( final Score pScore )
     {
-        final boolean added = super.addRemovesLevel( pCount );
+        final boolean added = super.addRemovesLevel( pScore );
         if ( added )
         {
             writeToStoreInt( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
@@ -133,7 +136,7 @@ final class MobileHallOfFame extends HallOfFame
     }
     
     private static final boolean writeToStoreInt( final String pStoreName,
-                                                  final int[] pValues )
+                                                  final Score[] pValues )
     {
         boolean success = false;
         
@@ -144,7 +147,7 @@ final class MobileHallOfFame extends HallOfFame
             {
                 for ( int i = 0; i < pValues.length; i++ )
                 {
-                    final byte[] data = getDataInt( pValues[ i ] );
+                    final byte[] data = pValues[ i ].getAsBytes();
                     store.setRecord( i + 1, data, 0, data.length );
                 }
                 success = true;
@@ -168,14 +171,14 @@ final class MobileHallOfFame extends HallOfFame
     }
     
     private static final boolean initializeStoreInt( final RecordStore pStore,
-                                                     final int[] pValues )
+                                                     final Score[] pValues )
     {
         boolean success = true;
         try
         {
             for ( int i = 0; success && i < pValues.length; i++ )
             {
-                success = addRecordToStore( pStore, getDataInt( pValues[ i ] ) );
+                success = addRecordToStore( pStore, pValues[ i ].getAsBytes() );
             }
         }
         catch ( final IOException e )
@@ -184,20 +187,6 @@ final class MobileHallOfFame extends HallOfFame
             success = false;
         }
         return success;
-    }
-    
-    private static final byte[] getDataInt( final int pValue )
-        throws IOException
-    {
-        final byte[] data;
-        
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream( baos );
-        dos.writeInt( pValue );
-        data = baos.toByteArray();
-        dos.close();
-        
-        return data;
     }
     
     public void clearAll()
@@ -244,44 +233,51 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void addScores()
     {
-        addTitle( mForm, Resources.TITLE_SCORES_TOTAL );
-        addValues( mForm, mScoresTotal.getValues() );
-        addTitle( mForm, Resources.TITLE_SCORES_LEVEL );
-        addValues( mForm, mScoresLevel.getValues() );
+        addTitle( Resources.TITLE_SCORES_TOTAL );
+        addValues( mScoresTotal.getValues() );
+        addTitle( Resources.TITLE_SCORES_LEVEL );
+        addValues( mScoresLevel.getValues() );
     }
     
     private final void addRemoves()
     {
-        addTitle( mForm, Resources.TITLE_REMOVES_LEVEL );
-        addValues( mForm, mRemovesLevel.getValues() );
+        addTitle( Resources.TITLE_REMOVES_LEVEL );
+        addValues( mRemovesLevel.getValues() );
     }
     
-    private static final void addTitle( final Form pForm,
-                                        final String pTitle )
+    private final void addTitle( final String pTitle )
     {
-        pForm.append( pTitle + "\n" );
+        mForm.append( pTitle + "\n" );
     }
 
-    private static final void addValues( final Form pForm,
-                                         final int[] pValues )
+    private final void addValues( final Score[] pValues )
     {
         final int size = pValues.length;
         for( int i = 0; i < size; i++ )
         {
-            addItem( pForm,
-                     String.valueOf( i + 1 ),
-                     String.valueOf( pValues[ i ] ),
-                     true );
+            addItem( String.valueOf( i + 1 ),
+                     pValues[ i ].getValue(),
+                     pValues[ i ].getLevel() );
         }
     }
     
-    private static final void addItem( final Form pForm,
-                                       final String pRank,
-                                       final String pValue,
-                                       final boolean pRowChange )
+    private final void addItem( final String pRank, final int pValue,
+                                final int pLevel )
     {
-        pForm.append( pRank + ":" );
-        pForm.append( pValue + ( pRowChange ? "\n" : "" ) );
+        if ( pValue == 0 )
+        {
+            mForm.append( pRank + ":\n" );
+        }
+        else
+        {
+            mForm.append( pRank + ":" );
+            
+            final StringItem item = new StringItem( null, String.valueOf( pValue ) );
+            item.setPreferredSize( mScoreWidth, -1 );
+            mForm.append( item );
+
+            mForm.append( String.valueOf( pLevel ) + "\n" );
+        }
     }
     
     private final void readScoresLevel()
@@ -297,7 +293,7 @@ final class MobileHallOfFame extends HallOfFame
             else
             {
                 mScoresLevel.setValues( readValuesInt( mStoreScoresLevel,
-                                                         mScoresLevel.size() ) );
+                                                       mScoresLevel.size() ) );
             }
         }        
         catch ( final RecordStoreException e )
@@ -395,11 +391,11 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private static final int[] readValuesInt( final RecordStore pStore,
-                                              final int pValueCount )
+    private static final Score[] readValuesInt( final RecordStore pStore,
+                                                final int pValueCount )
         throws RecordStoreException
     {
-        final int[] values = new int[ pValueCount ];
+        final Score[] values = new Score[ pValueCount ];
         
         for ( int i = 0; i < values.length; i++ )
         {
@@ -408,12 +404,12 @@ final class MobileHallOfFame extends HallOfFame
            {
                try
                {
-                   values[ i ] = dis.readInt();
+                   values[ i ] = new Score( dis );
                    dis.close();
                }
                catch ( final IOException e )
                {
-                   MobileMain.error(   "Failed to read int values from store "
+                   MobileMain.error(   "Failed to read scores from store "
                                      + pStore, e );
                }
             }

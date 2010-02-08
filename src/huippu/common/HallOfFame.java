@@ -7,38 +7,38 @@ public abstract class HallOfFame
     protected static final String STORE_REMOVES_LEVEL = "RemovesLevel";
     
     protected StoreIntDescending mScoresLevel =
-        new StoreIntDescending( Scores.getInitialScoresLevel() );
+        new StoreIntDescending( Score.getInitialScoresLevel() );
     protected StoreIntDescending mScoresTotal =
-        new StoreIntDescending( Scores.getInitialScoresTotal() );
+        new StoreIntDescending( Score.getInitialScoresTotal() );
     protected StoreIntAscending mRemovesLevel =
-        new StoreIntAscending( Scores.getInitialRemovesLevel() );
+        new StoreIntAscending( Score.getInitialRemovesLevel() );
     
-    public boolean addScoreLevel( final int pScore )
+    public boolean addScoreLevel( final Score pScore )
     {
         return mScoresLevel.addValue( pScore );
     }
     
-    public boolean addScoreTotal( final int pScore )
+    public boolean addScoreTotal( final Score pScore )
     {
         return mScoresTotal.addValue( pScore );
     }
     
-    public boolean addRemovesLevel( final int pCount )
+    public boolean addRemovesLevel( final Score pScore )
     {
-        return mRemovesLevel.addValue( pCount );
+        return mRemovesLevel.addValue( pScore );
     }
     
-    public final int[] getScoresLevel()
+    public final Score[] getScoresLevel()
     {
         return mScoresLevel.getValues();
     }
     
-    public final int[] getScoresTotal()
+    public final Score[] getScoresTotal()
     {
         return mScoresTotal.getValues();
     }
     
-    public final int[] getRemovesLevel()
+    public final Score[] getRemovesLevel()
     {
         return mRemovesLevel.getValues();
     }
