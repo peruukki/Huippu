@@ -33,4 +33,7 @@ public final class Resources
     public static final String TITLE_SCORES_LEVEL = "Tason pisteet:";
     public static final String TITLE_REMOVES_AVG = "Poistojen keskiarvo:";
     public static final String TITLE_REMOVES_LEVEL = "Tason poistot:";
+    
+    // Misc
+    public static final String DATE_DELIM = ".";
 }

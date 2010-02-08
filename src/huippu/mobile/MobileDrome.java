@@ -3,6 +3,9 @@ package huippu.mobile;
 import huippu.common.Cell;
 import huippu.common.Resources;
 import huippu.common.Score;
+import huippu.common.ScoreDate;
+
+import java.util.Date;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
@@ -357,15 +360,21 @@ final class MobileDrome
     
     private final void updateTotalStats()
     {
-        mHOF.addScoreTotal( new Score( mScoreTotal, mLevel ) );
+        mHOF.addScoreTotal( new Score( mScoreTotal,
+                                       mLevel,
+                                       new ScoreDate( new Date() ) ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
     {
-        mHOF.addScoreLevel( new Score( mScoreLevel, mLevel ) );
+        mHOF.addScoreLevel( new Score( mScoreLevel,
+                                       mLevel,
+                                       new ScoreDate( new Date() ) ) );
         if ( pSuccess )
         {
-            mHOF.addRemovesLevel( new Score( mRemoveCountLevel, mLevel ) );
+            mHOF.addRemovesLevel( new Score( mRemoveCountLevel,
+                                             mLevel,
+                                             new ScoreDate( new Date() ) ) );
         }
     }
     

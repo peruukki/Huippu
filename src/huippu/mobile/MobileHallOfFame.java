@@ -28,6 +28,7 @@ final class MobileHallOfFame extends HallOfFame
     
     private final MobileDrome mDrome;
     private final int mScoreWidth;
+    private final int mLevelWidth;
     private Form mForm;
     
     private RecordStore mStoreScoresLevel;
@@ -38,7 +39,9 @@ final class MobileHallOfFame extends HallOfFame
     {
         super();
         mDrome = pDrome;
-        mScoreWidth = 5 * pFont.charWidth( '0' );
+        final int charWidth = pFont.charWidth( '0' );
+        mScoreWidth = 5 * charWidth;
+        mLevelWidth = 3 * charWidth;
         readFromStore();
     }
     
@@ -255,16 +258,14 @@ final class MobileHallOfFame extends HallOfFame
         final int size = pValues.length;
         for( int i = 0; i < size; i++ )
         {
-            addItem( String.valueOf( i + 1 ),
-                     pValues[ i ].getValue(),
-                     pValues[ i ].getLevel() );
+            addItem( String.valueOf( i + 1 ), pValues[ i ] );
         }
     }
     
-    private final void addItem( final String pRank, final int pValue,
-                                final int pLevel )
+    private final void addItem( final String pRank, final Score pScore )
     {
-        if ( pValue == 0 )
+        final int value = pScore.getValue();
+        if ( value == 0 )
         {
             mForm.append( pRank + ":\n" );
         }
@@ -272,11 +273,17 @@ final class MobileHallOfFame extends HallOfFame
         {
             mForm.append( pRank + ":" );
             
-            final StringItem item = new StringItem( null, String.valueOf( pValue ) );
-            item.setPreferredSize( mScoreWidth, -1 );
-            mForm.append( item );
+            final StringItem valueItem =
+                new StringItem( null, String.valueOf( value ) );
+            valueItem.setPreferredSize( mScoreWidth, -1 );
+            mForm.append( valueItem );
 
-            mForm.append( String.valueOf( pLevel ) + "\n" );
+            final StringItem levelItem =
+                new StringItem( null, String.valueOf( pScore.getLevel() ) );
+            levelItem.setPreferredSize( mLevelWidth, -1 );
+            mForm.append( levelItem );
+            
+            mForm.append( String.valueOf( pScore.getDate() ) + "\n" );
         }
     }
     
