@@ -19,7 +19,7 @@ import javax.microedition.rms.RecordStore;
 import javax.microedition.rms.RecordStoreException;
 
 final class MobileHallOfFame extends HallOfFame
-    implements CommandListener
+    implements CommandListener, ConfirmationReceiver
 {
     private final Command mCmdOK =
         new Command( Resources.TEXT_RETURN, Command.BACK, 1 );
@@ -219,19 +219,6 @@ final class MobileHallOfFame extends HallOfFame
         mForm = new Form( Resources.TITLE_HOF );
         addScores();
         addRemoves();
-    }
-
-    public final void commandAction( final Command pC, final Displayable pD )
-    {
-        if ( pC == mCmdOK )
-        {
-            mDrome.show();
-        }
-        else if ( pC == mCmdReset )
-        {
-            clearAll();
-            showHallOfFame();
-        }
     }
     
     private final void addScores()
@@ -438,5 +425,40 @@ final class MobileHallOfFame extends HallOfFame
         }
         
         return dis;
+    }
+
+    public final void commandAction( final Command pCommand,
+                                     final Displayable pDisplayable )
+    {
+        if ( pCommand == mCmdOK )
+        {
+            mDrome.show();
+        }
+        else if ( pCommand == mCmdReset )
+        {
+            MobileMain.confirm( Resources.TEXT_RESET_HOF_CONFIRM, this, pCommand );
+        }
+        else
+        {
+            MobileMain.error(   "Unknown action command for class "
+                              + this.getClass() + ": " + pCommand, null );
+        }
+    }
+
+    public final void handleResult( final Command pCommand, final int pResult)
+    {
+        if ( pCommand == mCmdReset )
+        {
+            if ( pResult == Command.OK )
+            {
+                clearAll();
+                showHallOfFame();
+            }
+        }
+        else
+        {
+            MobileMain.error(   "Unknown confirmation command for class "
+                              + this.getClass() + ": " + pCommand, null );
+        }
     }
 }

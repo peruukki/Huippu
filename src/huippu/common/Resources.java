@@ -26,6 +26,10 @@ public final class Resources
     public static final String TEXT_VIEW_HOF = "Huipputulokset";
     public static final String TEXT_RETURN = "Edell.";
     public static final String TEXT_RESET_HOF = "Nollaa";
+    public static final String TEXT_RESET_HOF_CONFIRM =
+        "Haluatko varmasti nollata tulokset?";
+    public static final String TEXT_YES = "Kyllä";
+    public static final String TEXT_NO = "Ei";
     
     // Title texts
     public static final String TITLE_HOF = "Huipputulokset";
@@ -33,6 +37,7 @@ public final class Resources
     public static final String TITLE_SCORES_LEVEL = "Tason pisteet:";
     public static final String TITLE_REMOVES_AVG = "Poistojen keskiarvo:";
     public static final String TITLE_REMOVES_LEVEL = "Tason poistot:";
+    public static final String TITLE_CONFIRM = "Vahvistus";
     
     // Misc
     public static final String DATE_DELIM = ".";
