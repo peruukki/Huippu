@@ -14,10 +14,10 @@ final class MobileDude3 extends MobileDude
     public void draw( final Graphics pGraphics )
     {
         pGraphics.setColor( COLOR_DRAW );
-        pGraphics.fillArc( mScreenX + CELL_OFFSET,
-                           mScreenY + CELL_OFFSET,
-                           mCellWidth - 1 - CELL_OFFSET,
-                           mCellHeight - 1 - CELL_OFFSET,
+        pGraphics.fillArc( mScreenX + mOffsetX,
+                           mScreenY + mOffsetY,
+                           mCellWidth - ( 2 * mOffsetX ),
+                           mCellHeight - ( 2 * mOffsetY ),
                            0,
                            360 );
     }

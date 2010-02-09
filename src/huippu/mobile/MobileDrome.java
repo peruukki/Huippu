@@ -2,6 +2,7 @@ package huippu.mobile;
 
 import huippu.common.Cell;
 import huippu.common.DromeComponent;
+import huippu.common.Dude;
 import huippu.common.Resources;
 import huippu.common.Score;
 import huippu.common.ScoreDate;
@@ -85,6 +86,7 @@ final class MobileDrome
     {
         initDrome( pWidth - REDUCE_WIDTH, pHeight - REDUCE_HEIGHT );
         DromeComponent.setCellSize( mCellWidth, mCellHeight );
+        Dude.updateSize();
         mPointer.updateScreenPosition();
         mDudeGrid.updateDudePositions();
     }
