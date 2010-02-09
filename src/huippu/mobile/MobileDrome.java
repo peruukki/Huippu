@@ -210,23 +210,25 @@ final class MobileDrome
         {
             final int stringWidth = g.getFont()
                                      .stringWidth( mFinishedString );
-            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - 2;
-            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - 2;
+            final int border = 5;
+            final int bottomReduction = 2;
+            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - border;
+            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - border;
             
             g.setColor( Resources.COLOR_BORDER );
             g.drawRect( leftX,
                         topY,
-                        stringWidth + 3,
-                        TEXT_HEIGHT + 1 );
+                        stringWidth + ( 2 * border ) - 1,
+                        TEXT_HEIGHT + ( 2 * border ) - 1 - bottomReduction );
             g.setColor( Resources.COLOR_BG_OTHER );
             g.fillRect( leftX + 1,
                         topY + 1,
-                        stringWidth + 2,
-                        TEXT_HEIGHT );
+                        stringWidth + ( 2 * border ) - 2,
+                        TEXT_HEIGHT + ( 2 * border ) - 2 - bottomReduction );
             g.setColor( Resources.COLOR_TEXT );
             g.drawString( mFinishedString,
-                          leftX + 2,
-                          topY + 2,
+                          leftX + border,
+                          topY + border,
                           Graphics.TOP | Graphics.LEFT );
         }
     }
