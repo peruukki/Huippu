@@ -3,21 +3,27 @@ package huippu.common;
 
 public abstract class DromeComponent
 {
-    protected final int mColumnCount;
-    protected final int mRowCount;
+    protected static int mColumnCount = 0;
+    protected static int mRowCount = 0;
     
-    protected int mCellWidth;
-    protected int mCellHeight;
+    protected static int mCellWidth = 0;
+    protected static int mCellHeight = 0;
     
     protected Cell mCell;
     
     protected int mScreenX;
     protected int mScreenY;
     
-    public DromeComponent( final int pColumnCount, final int pRowCount )
+    public static void setGridSize( final int pColumnCount, final int pRowCount )
     {
         mColumnCount = pColumnCount;
         mRowCount = pRowCount;
+    }
+    
+    public static void setCellSize( final int pCellWidth, final int pCellHeight )
+    {
+        mCellWidth = pCellWidth;
+        mCellHeight = pCellHeight;
     }
     
     public final void setCellPosition( final Cell pCell )
@@ -30,12 +36,8 @@ public abstract class DromeComponent
         return mCell;
     }
     
-    public final void updateScreenPosition( final int pCellWidth,
-                                            final int pCellHeight )
+    public final void updateScreenPosition()
     {
-        mCellWidth = pCellWidth;
-        mCellHeight = pCellHeight;
-        
         mScreenX = mCell.x * mCellWidth;
         mScreenY = mCell.y * mCellHeight;
     }

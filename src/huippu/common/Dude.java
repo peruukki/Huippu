@@ -8,9 +8,9 @@ public abstract class Dude
     
     private final int mId;
     
-    public Dude( final int pId, final int pColumnCount, final int pRowCount )
+    public Dude( final int pId )
     {
-        super( pColumnCount, pRowCount );
+        super();
         mId = pId;
     }
     

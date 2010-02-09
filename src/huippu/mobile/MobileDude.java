@@ -10,29 +10,27 @@ abstract class MobileDude extends Dude
     
     static final int COLOR_REMOVABLE = 0x00BBBBBB;
     
-    public MobileDude( final int pId, final int pColumnCount, final int pRowCount )
+    public MobileDude( final int pId )
     {
-        super( pId, pColumnCount, pRowCount );
+        super( pId );
     }
 
-    public static final MobileDude getDude( final int pColumnCount,
-                                            final int pRowCount,
-                                            final int pId )
+    public static final MobileDude getDude( final int pId )
     {
         final MobileDude dude;
         
         switch ( pId )
         {
             case 0:
-                dude = new MobileDude1( pId, pColumnCount, pRowCount );
+                dude = new MobileDude1( pId );
                 break;
                 
             case 1:
-                dude = new MobileDude2( pId, pColumnCount, pRowCount );
+                dude = new MobileDude2( pId );
                 break;
 
             case 2:
-                dude = new MobileDude3( pId, pColumnCount, pRowCount );
+                dude = new MobileDude3( pId );
                 break;
                 
             default:

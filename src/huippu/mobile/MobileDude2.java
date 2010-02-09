@@ -6,9 +6,9 @@ final class MobileDude2 extends MobileDude
 {
     static final int COLOR_DRAW = 0x0020AA40;
 
-    public MobileDude2( final int pId, final int pColumnCount, final int pRowCount )
+    public MobileDude2( final int pId )
     {
-        super( pId, pColumnCount, pRowCount );
+        super( pId );
     }
 
     public void draw( final Graphics pGraphics )

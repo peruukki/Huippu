@@ -1,6 +1,7 @@
 package huippu.mobile;
 
 import huippu.common.Cell;
+import huippu.common.DromeComponent;
 import huippu.common.Resources;
 import huippu.common.Score;
 import huippu.common.ScoreDate;
@@ -61,7 +62,8 @@ final class MobileDrome
     {
         mDisplay = Display.getDisplay( pApplication );
         mMenu = new MobileMenu( pApplication, this );
-        mPointer = new MobilePointer( mColumnCount, mRowCount );
+        DromeComponent.setGridSize( mColumnCount, mRowCount );
+        mPointer = new MobilePointer();
         mDudeGrid = new MobileDudeGrid( mColumnCount, mRowCount );
         setFullScreenMode( true );
         reinit();
@@ -82,8 +84,9 @@ final class MobileDrome
     protected final void sizeChanged( final int pWidth, final int pHeight )
     {
         initDrome( pWidth - REDUCE_WIDTH, pHeight - REDUCE_HEIGHT );
-        mPointer.updateScreenPosition( mCellWidth, mCellHeight );
-        mDudeGrid.updateDudePositions( mCellWidth, mCellHeight );
+        DromeComponent.setCellSize( mCellWidth, mCellHeight );
+        mPointer.updateScreenPosition();
+        mDudeGrid.updateDudePositions();
     }
     
     private final void initDrome( final int pWidth, final int pHeight )
@@ -104,12 +107,12 @@ final class MobileDrome
     private final void initPointer()
     {
         mPointer.setCellPosition( new Cell( 0, 0 ) );
-        mPointer.updateScreenPosition( mCellWidth, mCellHeight );
+        mPointer.updateScreenPosition();
     }
         
     private final void initDudes()
     {
-        mDudeGrid.fillWithDudes( mCellWidth, mCellHeight, mLevel );
+        mDudeGrid.fillWithDudes( mLevel );
         mDudeGrid.setCurrentCell( mPointer.getCell() );
     }
 

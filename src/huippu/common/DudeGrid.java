@@ -70,8 +70,7 @@ public abstract class DudeGrid
         return removeCount;
     }
     
-    public final void updateDudePositions( final int pCellWidth,
-                                           final int pCellHeight )
+    public final void updateDudePositions()
     {
         for ( int x = 0; x < mColumnCount; x++ )
         {
@@ -80,7 +79,7 @@ public abstract class DudeGrid
                 final Dude dude = mDudes[ x ][ y ]; 
                 if ( dude != null )
                 {
-                    dude.updateScreenPosition( pCellWidth, pCellHeight );
+                    dude.updateScreenPosition();
                 }
             }
         }
@@ -320,9 +319,7 @@ public abstract class DudeGrid
         }
     }
 
-    public abstract void fillWithDudes( final int pCellWidth,
-                                        final int pCellHeight,
-                                        final int pLevel );
+    public abstract void fillWithDudes( final int pLevel );
     
     protected final void calculateDudeIdProbabilities( final int pLevel )
     {

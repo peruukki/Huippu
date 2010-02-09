@@ -12,8 +12,7 @@ final class MobileDudeGrid extends DudeGrid
         super( pColumnCount, pRowCount, MobileDude.DUDE_COUNT );
     }
 
-    public final void fillWithDudes( final int pCellWidth, final int pCellHeight,
-                                     final int pLevel )
+    public final void fillWithDudes( final int pLevel )
     {
         super.calculateDudeIdProbabilities( pLevel );
         
@@ -22,11 +21,9 @@ final class MobileDudeGrid extends DudeGrid
             for ( int y = 0; y < mRowCount; y++ )
             {
                 final MobileDude newDude =
-                    MobileDude.getDude( mColumnCount,
-                                        mRowCount,
-                                        getNextDudeId( x, y ) );
+                    MobileDude.getDude( getNextDudeId( x, y ) );
                 newDude.setCellPosition( new Cell( x, y ) );
-                newDude.updateScreenPosition( pCellWidth, pCellHeight );
+                newDude.updateScreenPosition();
                 mDudes[ x ][ y ] = newDude;
             }
         }
