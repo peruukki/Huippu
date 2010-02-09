@@ -6,7 +6,6 @@ public final class Resources
     public static final int COLOR_TEXT = 0x00011000;
     public static final int COLOR_BG_DROME = 0x00FFFFCC;
     public static final int COLOR_BG_OTHER = 0x00CCCCFF;
-    public static final int COLOR_CELL = 0x000000FF;
     public static final int COLOR_BORDER = 0x008F8F00;
     
     // Drome texts
@@ -14,7 +13,6 @@ public final class Resources
     public static final String TEXT_SCORE_LEVEL = "Pisteet: ";
     public static final String TEXT_SCORE_TOTAL = "Yhteensä: ";
     public static final String TEXT_REMOVES_LEVEL = "Poistot: ";
-    public static final String TEXT_REMOVES_AVG = "KA: ";
     public static final String TEXT_SCREEN_SIZE = "Koko: ";
     public static final String TEXT_FINISHED_SUCCESS = "Onnistuit!";
     public static final String TEXT_FINISHED_FAIL = "Peli loppui";

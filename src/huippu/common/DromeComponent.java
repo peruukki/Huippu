@@ -3,11 +3,6 @@ package huippu.common;
 
 public abstract class DromeComponent
 {
-    public static final byte DOWN = 2;
-    public static final byte LEFT = 4;
-    public static final byte RIGHT = 6;
-    public static final byte UP = 8;
-    
     protected final int mColumnCount;
     protected final int mRowCount;
     
