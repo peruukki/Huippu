@@ -6,7 +6,7 @@ import javax.microedition.lcdui.Graphics;
 
 final class MobilePointer extends Pointer
 {
-    private static final int COLOR_DRAW = 0x00FF8080;
+    private static final int COLOR_DRAW = 0x00FF7799;
 
     public MobilePointer( final int pColumnCount, final int pRowCount )
     {

@@ -14,9 +14,11 @@ final class MobileDude2 extends MobileDude
     public void draw( final Graphics pGraphics )
     {
         pGraphics.setColor( COLOR_DRAW );
-        pGraphics.fillRect( mScreenX + CELL_OFFSET + 1,
-                            mScreenY + CELL_OFFSET,
-                            mCellWidth - 2 * CELL_OFFSET - 2,
-                            mCellHeight - 2 * CELL_OFFSET );
+        pGraphics.fillTriangle( mScreenX + ( mCellWidth / 2 ),
+                                mScreenY + CELL_OFFSET,
+                                mScreenX + CELL_OFFSET,
+                                mScreenY + mCellHeight - CELL_OFFSET,
+                                mScreenX + mCellWidth - CELL_OFFSET,
+                                mScreenY + mCellHeight - CELL_OFFSET );
     }
 }

@@ -22,7 +22,7 @@ final class MobileDrome
     private static final Font FONT =
         Font.getFont( Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_SMALL );
 
-    private static final int TEXT_HEIGHT = FONT.getHeight() + 1;
+    private static final int TEXT_HEIGHT = FONT.getHeight() + 2;
     private static final int REDUCE_WIDTH = 0;  // 52
     private static final int REDUCE_HEIGHT = 0; // 75
     
@@ -161,7 +161,7 @@ final class MobileDrome
                     mDromeWidth - 1,
                     mDromeHeight - 1);
 
-        final int bottomY = mScreenHeight - 1;
+        final int bottomY = mScreenHeight - 2;
         final int leftX = TEXT_OFFSET;
         final int rightX = mScreenWidth - TEXT_OFFSET;
         g.setColor( Resources.COLOR_TEXT );
@@ -205,18 +205,23 @@ final class MobileDrome
         {
             final int stringWidth = g.getFont()
                                      .stringWidth( mFinishedString );
-            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - 1;
-            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - 1;
+            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - 2;
+            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - 2;
             
-            g.setColor( Resources.COLOR_BG_DROME );
-            g.fillRect( leftX,
+            g.setColor( Resources.COLOR_BORDER );
+            g.drawRect( leftX,
                         topY,
+                        stringWidth + 3,
+                        TEXT_HEIGHT + 1 );
+            g.setColor( Resources.COLOR_BG_OTHER );
+            g.fillRect( leftX + 1,
+                        topY + 1,
                         stringWidth + 2,
                         TEXT_HEIGHT );
             g.setColor( Resources.COLOR_TEXT );
             g.drawString( mFinishedString,
-                          leftX + 1,
-                          topY + 1,
+                          leftX + 2,
+                          topY + 2,
                           Graphics.TOP | Graphics.LEFT );
         }
     }

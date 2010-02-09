@@ -3,10 +3,10 @@ package huippu.common;
 public final class Resources
 {
     // Colors
-    public static final int COLOR_TEXT = 0x00011000;
     public static final int COLOR_BG_DROME = 0x00FFFFCC;
-    public static final int COLOR_BG_OTHER = 0x00CCCCFF;
-    public static final int COLOR_BORDER = 0x008F8F00;
+    public static final int COLOR_TEXT = 0x00FFDDDD;
+    public static final int COLOR_BG_OTHER = 0x004411FF;
+    public static final int COLOR_BORDER = 0x00888800;
     
     // Drome texts
     public static final String TEXT_LEVEL = "Taso: ";
