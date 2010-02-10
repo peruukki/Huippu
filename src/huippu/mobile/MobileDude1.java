@@ -15,9 +15,9 @@ final class MobileDude1 extends MobileDude
     protected final void draw( final Graphics pG, final int pOffsetX,
                                final int pOffsetY )
     {
-        pG.fillRect( mScreenX + mOffsetX + pOffsetX,
-                     mScreenY + mOffsetY + pOffsetY,
-                     mCellWidth - 2 * mOffsetX - 1,
-                     mCellHeight - 2 * mOffsetY - 1 );
+        pG.fillRect( mLeftX + pOffsetX,
+                     mTopY + pOffsetY,
+                     mWidth,
+                     mHeight );
     }
 }

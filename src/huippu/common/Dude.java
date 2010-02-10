@@ -9,6 +9,13 @@ public abstract class Dude
     protected static int mOffsetX = DEFAULT_OFFSET;
     protected static int mOffsetY = DEFAULT_OFFSET;
     
+    protected int mLeftX = 0;
+    protected int mRightX = 0;
+    protected int mTopY = 0;
+    protected int mBottomY = 0;
+    protected int mWidth = 0;
+    protected int mHeight = 0;
+    
     private final int mId;
     
     public static void updateSize()
@@ -45,6 +52,37 @@ public abstract class Dude
         mId = pId;
     }
     
+    public void updateScreenPosition()
+    {
+        super.updateScreenPosition();
+        updatePositionX();
+        updatePositionY();
+    }
+    
+    public void moveLeft( final int pCellCount )
+    {
+        super.moveLeft( pCellCount );
+        updatePositionX();
+    }
+    
+    public void moveRight( final int pCellCount )
+    {
+        super.moveRight( pCellCount );
+        updatePositionX();
+    }
+    
+    public void moveDown( final int pCellCount )
+    {
+        super.moveDown( pCellCount );
+        updatePositionY();
+    }
+    
+    public void moveUp( final int pCellCount )
+    {
+        super.moveUp( pCellCount );
+        updatePositionY();
+    }
+    
     public final int getId()
     {
         return mId;
@@ -54,5 +92,19 @@ public abstract class Dude
     {
         return    pOther != null
                && getClass().equals( pOther.getClass() );
+    }
+    
+    protected void updatePositionX()
+    {
+        mLeftX = mScreenX + mOffsetX;
+        mRightX = mScreenX + mCellWidth - mOffsetX - 2;
+        mWidth = mRightX - mLeftX;
+    }
+    
+    protected void updatePositionY()
+    {
+        mTopY = mScreenY + mOffsetY;
+        mBottomY = mScreenY + mCellHeight - mOffsetY - 2;
+        mHeight = mBottomY - mTopY;
     }
 }

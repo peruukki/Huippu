@@ -36,7 +36,7 @@ public abstract class DromeComponent
         return mCell;
     }
     
-    public final void updateScreenPosition()
+    public void updateScreenPosition()
     {
         mScreenX = mCell.x * mCellWidth;
         mScreenY = mCell.y * mCellHeight;
