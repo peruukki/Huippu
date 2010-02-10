@@ -9,14 +9,15 @@ final class MobileDude1 extends MobileDude
     public MobileDude1( final int pId )
     {
         super( pId );
+        mColorDraw = COLOR_DRAW;
     }
-
-    public final void draw( final Graphics pGraphics )
+    
+    protected final void draw( final Graphics pG, final int pOffsetX,
+                               final int pOffsetY )
     {
-        pGraphics.setColor( COLOR_DRAW );
-        pGraphics.fillRect( mScreenX + mOffsetX,
-                            mScreenY + mOffsetY,
-                            mCellWidth - 2 * mOffsetX,
-                            mCellHeight - 2 * mOffsetY );
+        pG.fillRect( mScreenX + mOffsetX + pOffsetX,
+                     mScreenY + mOffsetY + pOffsetY,
+                     mCellWidth - 2 * mOffsetX - 1,
+                     mCellHeight - 2 * mOffsetY - 1 );
     }
 }

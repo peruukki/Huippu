@@ -9,6 +9,9 @@ abstract class MobileDude extends Dude
     public static final int DUDE_COUNT = 3;
     
     static final int COLOR_REMOVABLE = 0x00BBBBBB;
+    static final int COLOR_SHADOW = 0x00000000;
+    
+    protected int mColorDraw;
     
     public MobileDude( final int pId )
     {
@@ -40,15 +43,30 @@ abstract class MobileDude extends Dude
         return dude;
     }
     
-    final void drawAsRemovable( final Graphics pGraphics )
+    void drawAsRemovable( final Graphics pG )
     {
-        pGraphics.setColor( COLOR_REMOVABLE );
-        pGraphics.fillRect( mScreenX,
-                            mScreenY,
-                            mCellWidth,
-                            mCellHeight );
-        draw( pGraphics );
+        pG.setColor( COLOR_REMOVABLE );
+        pG.fillRect( mScreenX,
+                     mScreenY,
+                     mCellWidth,
+                     mCellHeight );
+        
+        // Draw Dude "down", without shadow
+        pG.setColor( mColorDraw );
+        draw( pG, 1, 1 );
     }
     
-    public abstract void draw( final Graphics pGraphics );
+    void draw( final Graphics pG )
+    {
+        // Draw shadow
+        pG.setColor( COLOR_SHADOW );
+        draw( pG, 1, 1 );
+        
+        // Draw Dude
+        pG.setColor( mColorDraw );
+        draw( pG, 0, 0 );
+    }
+    
+    protected abstract void draw( final Graphics pG, final int pOffsetX,
+                                  final int pOffsetY );
 }

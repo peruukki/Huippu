@@ -7,6 +7,7 @@ public final class Resources
     public static final int COLOR_TEXT = 0x00FFDDDD;
     public static final int COLOR_BG_OTHER = 0x004411FF;
     public static final int COLOR_BORDER = 0x00888800;
+    public static final int COLOR_SHADOW = 0x00000000;
     
     // Drome texts
     public static final String TEXT_LEVEL = "Taso: ";

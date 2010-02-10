@@ -18,7 +18,6 @@ final class MobileDrome
 	extends Canvas
 	implements Runnable
 {
-    private static final int DROME_THICKNESS = 1;
     private static final int TEXT_OFFSET = 2;
     
     private static final Font FONT =
@@ -100,10 +99,10 @@ final class MobileDrome
         mDromeHeight = round( pHeight - 2 * TEXT_HEIGHT, mRowCount );
         
         mDromeOffsetX = ( mScreenWidth - mDromeWidth ) / 2;
-        mDromeOffsetY = 0;
+        mDromeOffsetY = 1;
         
-        mCellWidth = ( mDromeWidth - 2 * DROME_THICKNESS ) / mColumnCount;
-        mCellHeight = ( mDromeHeight - 2 * DROME_THICKNESS ) / mRowCount;
+        mCellWidth = mDromeWidth / mColumnCount;
+        mCellHeight = mDromeHeight / mRowCount;
     }
     
     private final void initPointer()
@@ -127,115 +126,134 @@ final class MobileDrome
      */
     private final int round( final int pValue, final int pCellCount  )
     {
-        final int delta = ( pValue - ( 2 * DROME_THICKNESS ) ) % pCellCount;
+        final int delta = pValue % pCellCount;
         return pValue - delta;
     }
 
-    protected void paint( final Graphics g )
+    protected void paint( final Graphics pG )
     {
-        g.setFont( FONT );
-        redrawScreen( g );
-        g.translate( mDromeOffsetX + DROME_THICKNESS,
-                     mDromeOffsetY + DROME_THICKNESS );
+        pG.setFont( FONT );
+        drawScreen( pG );
+        pG.translate( mDromeOffsetX, mDromeOffsetY );
 
-        drawDudes( g );
-        mPointer.draw( g );
-        drawFinishedString( g );
+        drawDudes( pG );
+        mPointer.draw( pG );
+        drawFinishedString( pG );
 
-        g.translate( -mDromeOffsetX - DROME_THICKNESS,
-                     -mDromeOffsetY - DROME_THICKNESS );
+        pG.translate( -mDromeOffsetX, -mDromeOffsetY );
     }
 
-    private final void redrawScreen( final Graphics g )
+    private final void drawScreen( final Graphics pG )
     {
         // Clear background
-        g.setColor( Resources.COLOR_BG_OTHER );
-        g.fillRect( 0, 0, mScreenWidth, mScreenHeight );
+        pG.setColor( Resources.COLOR_BG_OTHER );
+        pG.fillRect( 0, 0, mScreenWidth, mScreenHeight );
+
+        // Draw shadow
+        pG.setColor( Resources.COLOR_SHADOW );
+        pG.drawRect( mDromeOffsetX + 1,
+                     mDromeOffsetY + 1,
+                     mDromeWidth - 1,
+                     mDromeHeight - 1 );
         
         // Fill drome with background color
-        g.setColor( Resources.COLOR_BG_DROME );
-        g.fillRect( mDromeOffsetX,
-                    mDromeOffsetY,
-                    mDromeWidth - 1,
-                    mDromeHeight - 1 );
-
-        // Draw borders
-        g.setColor( Resources.COLOR_BORDER );
-        g.drawRect( mDromeOffsetX,
-                    mDromeOffsetY,
-                    mDromeWidth - 1,
-                    mDromeHeight - 1);
+        pG.setColor( Resources.COLOR_BG_DROME );
+        pG.fillRect( mDromeOffsetX,
+                     mDromeOffsetY,
+                     mDromeWidth,
+                     mDromeHeight );
 
         final int bottomY = mScreenHeight - 2;
         final int leftX = TEXT_OFFSET;
         final int rightX = mScreenWidth - TEXT_OFFSET;
-        g.setColor( Resources.COLOR_TEXT );
 
         // Display level score
-        g.drawString( Resources.TEXT_SCORE_LEVEL + mScoreLevel,
-                      leftX,
-                      bottomY - TEXT_HEIGHT,
-                      Graphics.BOTTOM | Graphics.LEFT );
-
+        drawString( pG,
+                    Resources.TEXT_SCORE_LEVEL + mScoreLevel,
+                    leftX,
+                    bottomY - TEXT_HEIGHT,
+                    Graphics.BOTTOM | Graphics.LEFT );
+        
         // Display total score
-        g.drawString( Resources.TEXT_SCORE_TOTAL + mScoreTotal,
-                      leftX,
-                      bottomY,
-                      Graphics.BOTTOM | Graphics.LEFT );
+        drawString( pG,
+                    Resources.TEXT_SCORE_TOTAL + mScoreTotal,
+                    leftX,
+                    bottomY,
+                    Graphics.BOTTOM | Graphics.LEFT );
 
         
         // Display screen size
-//        g.drawString(   Resources.TEXT_SCREEN_SIZE + mDromeWidth
-//                      + " x " + mDromeHeight,
-//                      rightX,
-//                      bottomY - 2 * TEXT_HEIGHT,
-//                      Graphics.BOTTOM | Graphics.RIGHT );
+//        drawString( pG,
+//                      Resources.TEXT_SCREEN_SIZE + mDromeWidth
+//                    + " x " + mDromeHeight,
+//                    rightX,
+//                    bottomY - 2 * TEXT_HEIGHT,
+//                    Graphics.BOTTOM | Graphics.RIGHT );
         
         // Display level
-        g.drawString( Resources.TEXT_LEVEL + mLevel,
-                      rightX,
-                      bottomY - TEXT_HEIGHT,
-                      Graphics.BOTTOM | Graphics.RIGHT );
+        drawString( pG,
+                    Resources.TEXT_LEVEL + mLevel,
+                    rightX,
+                    bottomY - TEXT_HEIGHT,
+                    Graphics.BOTTOM | Graphics.RIGHT );
         
         // Display remove count
-        g.drawString( Resources.TEXT_REMOVES_LEVEL + mRemoveCountLevel,
-                      rightX,
-                      bottomY,
-                      Graphics.BOTTOM | Graphics.RIGHT );
+        drawString( pG,
+                    Resources.TEXT_REMOVES_LEVEL + mRemoveCountLevel,
+                    rightX,
+                    bottomY,
+                    Graphics.BOTTOM | Graphics.RIGHT );
     }
     
-    private final void drawFinishedString( final Graphics g )
+    private final void drawFinishedString( final Graphics pG )
     {
         if ( mFinishedString != null )
         {
-            final int stringWidth = g.getFont()
-                                     .stringWidth( mFinishedString );
+            final int stringWidth = pG.getFont()
+                                      .stringWidth( mFinishedString );
             final int border = 5;
             final int bottomReduction = 2;
             final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - border;
             final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - border;
+        
+            // Draw shadow
+            pG.setColor( Resources.COLOR_SHADOW );
+            pG.drawRect( leftX + 1,
+                         topY + 1,
+                         stringWidth + ( 2 * border ) - 2,
+                         TEXT_HEIGHT + ( 2 * border ) - 2 - bottomReduction );
             
-            g.setColor( Resources.COLOR_BORDER );
-            g.drawRect( leftX,
-                        topY,
-                        stringWidth + ( 2 * border ) - 1,
-                        TEXT_HEIGHT + ( 2 * border ) - 1 - bottomReduction );
-            g.setColor( Resources.COLOR_BG_OTHER );
-            g.fillRect( leftX + 1,
-                        topY + 1,
-                        stringWidth + ( 2 * border ) - 2,
-                        TEXT_HEIGHT + ( 2 * border ) - 2 - bottomReduction );
-            g.setColor( Resources.COLOR_TEXT );
-            g.drawString( mFinishedString,
-                          leftX + border,
-                          topY + border,
-                          Graphics.TOP | Graphics.LEFT );
+            // Draw background box
+            pG.setColor( Resources.COLOR_BG_OTHER );
+            pG.fillRect( leftX,
+                         topY,
+                         stringWidth + ( 2 * border ) - 1,
+                         TEXT_HEIGHT + ( 2 * border ) - 1 - bottomReduction );
+            
+            // Draw message
+            drawString( pG,
+                        mFinishedString,
+                        leftX + border,
+                        topY + border,
+                        Graphics.TOP | Graphics.LEFT );
         }
     }
-
-    private final void drawDudes( final Graphics pGraphics )
+    
+    private static final void drawString( final Graphics pG, final String pString,
+                                          final int pX, final int pY,
+                                          final int pAnchor )
     {
-        mDudeGrid.drawDudesAll( pGraphics );
+        pG.setColor( Resources.COLOR_SHADOW );
+        pG.drawString( pString, pX + 1, pY + 1, pAnchor );
+        
+        pG.setColor( Resources.COLOR_TEXT );
+        pG.drawString( pString, pX, pY, pAnchor );
+    }
+            
+
+    private final void drawDudes( final Graphics pG )
+    {
+        mDudeGrid.drawDudesAll( pG );
     }
 
     /**
