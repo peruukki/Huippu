@@ -1,13 +1,12 @@
 package huippu.common;
 
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 
 
 public final class Score
+    extends Storable
 {
     private static final boolean mUseAllZero = true;
     
@@ -30,6 +29,7 @@ public final class Score
     public Score( final DataInputStream pInput )
         throws IOException
     {
+        super( pInput );
         mValue = pInput.readInt();
         mLevel = pInput.readInt();
         mDate = new ScoreDate( pInput.readByte(),
@@ -67,20 +67,6 @@ public final class Score
         System.arraycopy( dataLevel, 0, data, offset, dataLevel.length );
         offset += dataLevel.length;
         System.arraycopy( dataDate, 0, data, offset, dataDate.length );
-        return data;
-    }
-    
-    private static final byte[] getDataInt( final int pValue )
-        throws IOException
-    {
-        final byte[] data;
-        
-        final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final DataOutputStream dos = new DataOutputStream( baos );
-        dos.writeInt( pValue );
-        data = baos.toByteArray();
-        dos.close();
-        
         return data;
     }
     

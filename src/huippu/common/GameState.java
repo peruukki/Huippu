@@ -1,7 +1,11 @@
 package huippu.common;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
 
 public final class GameState
+    extends Storable
 {
     private final DudeGrid mDudeGrid;
 
@@ -14,6 +18,21 @@ public final class GameState
     public GameState( final DudeGrid pDudeGrid )
     {
         mDudeGrid = pDudeGrid;
+    }
+    
+    public GameState( final DataInputStream pInput )
+        throws IOException
+    {
+        super( pInput );
+        // TODO: Set all instance variables from pInput
+        mDudeGrid = null;
+    }
+    
+    public byte[] getAsBytes()
+        throws IOException
+    {
+        // TODO: Convert instance variable values to byte data
+        return null;
     }
     
     public final DudeGrid getDudeGrid()
