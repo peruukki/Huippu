@@ -3,6 +3,8 @@ package huippu.mobile;
 import huippu.common.Cell;
 import huippu.common.DromeComponent;
 import huippu.common.Dude;
+import huippu.common.DudeGrid;
+import huippu.common.GameState;
 import huippu.common.Resources;
 import huippu.common.Score;
 import huippu.common.ScoreDate;
@@ -41,19 +43,13 @@ final class MobileDrome
     
     private int mDromeWidth;
     private int mDromeHeight;
-
-    private int mScoreLevel = 0;
-    private int mScoreTotal = 0;
-    private int mRemoveCountLevel = 0;
     
     private final MobileHallOfFame mHOF = new MobileHallOfFame( this, FONT );
-
-    private int mLevel = 1;
     
     private final Display mDisplay;
     private final MobileMenu mMenu;
     private final MobilePointer mPointer;
-    private final MobileDudeGrid mDudeGrid;
+    private final GameState mState;
     
     private String mFinishedString = null;
     private boolean mFinished = false;
@@ -64,7 +60,7 @@ final class MobileDrome
         mMenu = new MobileMenu( pApplication, this );
         DromeComponent.setGridSize( mColumnCount, mRowCount );
         mPointer = new MobilePointer();
-        mDudeGrid = new MobileDudeGrid( mColumnCount, mRowCount );
+        mState = new GameState( new MobileDudeGrid( mColumnCount, mRowCount ) );
         setFullScreenMode( true );
         reinit();
         sizeChanged( getWidth(), getHeight() );
@@ -74,8 +70,8 @@ final class MobileDrome
     {
         initPointer();
         initDudes();
-        mScoreLevel = 0;
-        mRemoveCountLevel = 0;
+        mState.setScoreLevel( 0 );
+        mState.setRemoveCountLevel( 0 );
         mFinishedString = null;
         mFinished = false;
         mMenu.setNextLevelEnabled( false );
@@ -87,7 +83,8 @@ final class MobileDrome
         DromeComponent.setCellSize( mCellWidth, mCellHeight );
         Dude.updateSize();
         mPointer.updateScreenPosition();
-        mDudeGrid.updateDudePositions();
+        mState.getDudeGrid()
+              .updateDudePositions();
     }
     
     private final void initDrome( final int pWidth, final int pHeight )
@@ -113,8 +110,9 @@ final class MobileDrome
         
     private final void initDudes()
     {
-        mDudeGrid.fillWithDudes( mLevel );
-        mDudeGrid.setCurrentCell( mPointer.getCell() );
+        final DudeGrid dudeGrid = mState.getDudeGrid(); 
+        dudeGrid.fillWithDudes( mState.getLevel() );
+        dudeGrid.setCurrentCell( mPointer.getCell() );
     }
 
     /**
@@ -169,14 +167,14 @@ final class MobileDrome
 
         // Display level score
         drawString( pG,
-                    Resources.TEXT_SCORE_LEVEL + mScoreLevel,
+                    Resources.TEXT_SCORE_LEVEL + mState.getScoreLevel(),
                     leftX,
                     bottomY - TEXT_HEIGHT,
                     Graphics.BOTTOM | Graphics.LEFT );
         
         // Display total score
         drawString( pG,
-                    Resources.TEXT_SCORE_TOTAL + mScoreTotal,
+                    Resources.TEXT_SCORE_TOTAL + mState.getScoreTotal(),
                     leftX,
                     bottomY,
                     Graphics.BOTTOM | Graphics.LEFT );
@@ -192,14 +190,14 @@ final class MobileDrome
         
         // Display level
         drawString( pG,
-                    Resources.TEXT_LEVEL + mLevel,
+                    Resources.TEXT_LEVEL + mState.getLevel(),
                     rightX,
                     bottomY - TEXT_HEIGHT,
                     Graphics.BOTTOM | Graphics.RIGHT );
         
         // Display remove count
         drawString( pG,
-                    Resources.TEXT_REMOVES_LEVEL + mRemoveCountLevel,
+                    Resources.TEXT_REMOVES_LEVEL + mState.getRemoveCountLevel(),
                     rightX,
                     bottomY,
                     Graphics.BOTTOM | Graphics.RIGHT );
@@ -253,7 +251,8 @@ final class MobileDrome
 
     private final void drawDudes( final Graphics pG )
     {
-        mDudeGrid.drawDudesAll( pG );
+        mState.getDudeGrid()
+              .drawDudesAll( pG );
     }
 
     /**
@@ -317,20 +316,21 @@ final class MobileDrome
                 break;
 
             case Canvas.FIRE:
-                final int removeCount = mDudeGrid.removeDudes();
+                final DudeGrid dudeGrid = mState.getDudeGrid();
+                final int removeCount = dudeGrid.removeDudes();
                 if ( removeCount > 0 )
                 {
                     final int increment = getScoreIncrement( removeCount );
-                    mScoreLevel += increment;
-                    mScoreTotal += increment;
-                    mRemoveCountLevel++;
+                    mState.incrementScoreLevel( increment );
+                    mState.incrementScoreTotal( increment );
+                    mState.incrementRemoveCountLevel();
                     
-                    if ( mDudeGrid.allDudesRemoved() )
+                    if ( dudeGrid.allDudesRemoved() )
                     {
                         dromeFinished = true;
                         dromeFinishSuccess = true;
                     }
-                    else if ( !mDudeGrid.isPossibleToRemoveDudes() )
+                    else if ( !dudeGrid.isPossibleToRemoveDudes() )
                     {
                         dromeFinished = true;
                         dromeFinishSuccess = false;
@@ -347,7 +347,8 @@ final class MobileDrome
 
         if ( updateCurrentCell )
         {
-            mDudeGrid.setCurrentCell( mPointer.getCell() );
+            mState.getDudeGrid()
+                  .setCurrentCell( mPointer.getCell() );
         }
 
         if ( repaint )
@@ -390,20 +391,20 @@ final class MobileDrome
     
     private final void updateTotalStats()
     {
-        mHOF.addScoreTotal( new Score( mScoreTotal,
-                                       mLevel,
+        mHOF.addScoreTotal( new Score( mState.getScoreTotal(),
+                                       mState.getLevel(),
                                        new ScoreDate( new Date() ) ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
     {
-        mHOF.addScoreLevel( new Score( mScoreLevel,
-                                       mLevel,
+        mHOF.addScoreLevel( new Score( mState.getScoreLevel(),
+                                       mState.getLevel(),
                                        new ScoreDate( new Date() ) ) );
         if ( pSuccess )
         {
-            mHOF.addRemovesLevel( new Score( mRemoveCountLevel,
-                                             mLevel,
+            mHOF.addRemovesLevel( new Score( mState.getRemoveCountLevel(),
+                                             mState.getLevel(),
                                              new ScoreDate( new Date() ) ) );
         }
     }
@@ -416,14 +417,14 @@ final class MobileDrome
     final void restart()
     {
         reinit();
-        mScoreTotal = 0;
-        mLevel = 1;
+        mState.setScoreTotal( 0 );
+        mState.setLevel( 1 );
         repaint();
     }
 
     final void startNextLevel()
     {
-        mLevel++;
+        mState.incrementLevel();
         reinit();
         repaint();
     }
