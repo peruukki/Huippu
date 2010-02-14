@@ -50,7 +50,7 @@ final class MobileHallOfFame extends HallOfFame
         final boolean added = super.addScoreLevel( pScore );
         if ( added )
         {
-            writeToStoreInt( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
+            writeToStore( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
         }
         return added;
     }
@@ -60,7 +60,7 @@ final class MobileHallOfFame extends HallOfFame
         final boolean added = super.addScoreTotal( pScore );
         if ( added )
         {
-            writeToStoreInt( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
+            writeToStore( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
         }
         return added;
     }
@@ -70,7 +70,7 @@ final class MobileHallOfFame extends HallOfFame
         final boolean added = super.addRemovesLevel( pScore );
         if ( added )
         {
-            writeToStoreInt( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
+            writeToStore( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
         }
         return added;
     }
@@ -84,9 +84,9 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void writeToStore()
     {
-        writeToStoreInt( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
-        writeToStoreInt( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
-        writeToStoreInt( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
+        writeToStore( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
+        writeToStore( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
+        writeToStore( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
     }
     
     private static final boolean addRecordToStore( final RecordStore pStore,
@@ -138,8 +138,8 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private static final boolean writeToStoreInt( final String pStoreName,
-                                                  final Score[] pValues )
+    private static final boolean writeToStore( final String pStoreName,
+                                               final Score[] pValues )
     {
         boolean success = false;
         
@@ -157,11 +157,11 @@ final class MobileHallOfFame extends HallOfFame
             }
             catch ( final IOException e )
             {
-                MobileMain.error( "Failed to get int data", e );
+                MobileMain.error( "Failed to get score data", e );
             }
             catch ( final RecordStoreException e )
             {
-                MobileMain.error(   "Failed to write int data to store "
+                MobileMain.error(   "Failed to write score data to store "
                                   + pStoreName, e );
             }
             finally
@@ -173,8 +173,8 @@ final class MobileHallOfFame extends HallOfFame
         return success;
     }
     
-    private static final boolean initializeStoreInt( final RecordStore pStore,
-                                                     final Score[] pValues )
+    private static final boolean initializeStore( final RecordStore pStore,
+                                                  final Score[] pValues )
     {
         boolean success = true;
         try
@@ -186,7 +186,7 @@ final class MobileHallOfFame extends HallOfFame
         }
         catch ( final IOException e )
         {
-            MobileMain.error( "Failed to get int data", e );
+            MobileMain.error( "Failed to get score data", e );
             success = false;
         }
         return success;
@@ -282,12 +282,12 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_SCORES_LEVEL, true );
             if ( mStoreScoresLevel.getNumRecords () == 0 )
             {
-                initializeStoreInt( mStoreScoresLevel, mScoresLevel.getValues() );
+                initializeStore( mStoreScoresLevel, mScoresLevel.getValues() );
             }
             else
             {
-                mScoresLevel.setValues( readValuesInt( mStoreScoresLevel,
-                                                       mScoresLevel.size() ) );
+                mScoresLevel.setValues( readScores( mStoreScoresLevel,
+                                                    mScoresLevel.size() ) );
             }
         }        
         catch ( final RecordStoreException e )
@@ -319,12 +319,12 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_SCORES_TOTAL, true );
             if ( mStoreScoresTotal.getNumRecords () == 0 )
             {
-                initializeStoreInt( mStoreScoresTotal, mScoresTotal.getValues() );
+                initializeStore( mStoreScoresTotal, mScoresTotal.getValues() );
             }
             else
             {
-                mScoresTotal.setValues( readValuesInt( mStoreScoresTotal,
-                                                         mScoresTotal.size() ) );
+                mScoresTotal.setValues( readScores( mStoreScoresTotal,
+                                                    mScoresTotal.size() ) );
             }
         }        
         catch ( final RecordStoreException e )
@@ -356,12 +356,12 @@ final class MobileHallOfFame extends HallOfFame
                 RecordStore.openRecordStore( STORE_REMOVES_LEVEL, true );
             if ( mStoreRemovesLevel.getNumRecords () == 0 )
             {
-                initializeStoreInt( mStoreRemovesLevel, mRemovesLevel.getValues() );
+                initializeStore( mStoreRemovesLevel, mRemovesLevel.getValues() );
             }
             else
             {
-                mRemovesLevel.setValues( readValuesInt( mStoreRemovesLevel,
-                                                        mRemovesLevel.size() ) );
+                mRemovesLevel.setValues( readScores( mStoreRemovesLevel,
+                                                     mRemovesLevel.size() ) );
             }
         }        
         catch ( final RecordStoreException e )
@@ -385,8 +385,8 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private static final Score[] readValuesInt( final RecordStore pStore,
-                                                final int pValueCount )
+    private static final Score[] readScores( final RecordStore pStore,
+                                             final int pValueCount )
         throws RecordStoreException
     {
         final Score[] values = new Score[ pValueCount ];
