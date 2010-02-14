@@ -45,6 +45,10 @@ public abstract class DudeGrid
                           - ( BASIC_MAX_RANDOM_VALUE % mDudeCount );
         mProportionBasic = mMaxRandomValue / mDudeCount;
     }
+
+    public abstract void fillWithDudes( final int pLevel );
+
+    public abstract void drawDudesAll( final Object pGraphics );
     
     public final void setCurrentCell( final Cell pCell )
     {
@@ -318,8 +322,6 @@ public abstract class DudeGrid
             mRemovableLastCol = larger;
         }
     }
-
-    public abstract void fillWithDudes( final int pLevel );
     
     protected final void calculateDudeIdProbabilities( final int pLevel )
     {

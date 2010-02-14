@@ -29,8 +29,9 @@ final class MobileDudeGrid extends DudeGrid
         }
     }
     
-    final void drawDudesAll( final Graphics pG )
+    public final void drawDudesAll( final Object pGraphics )
     {
+        final Graphics g = (Graphics) pGraphics;
         for ( int x = 0; x < mColumnCount; x++ )
         {
             for ( int y = 0; y < mRowCount; y++ )
@@ -40,11 +41,11 @@ final class MobileDudeGrid extends DudeGrid
                 {
                     if ( mRemovable[ x ][ y ] )
                     {
-                        dude.drawAsRemovable( pG );                    
+                        dude.drawAsRemovable( g );                    
                     }
                     else
                     {
-                        dude.draw( pG );
+                        dude.draw( g );
                     }
                 }
             }
