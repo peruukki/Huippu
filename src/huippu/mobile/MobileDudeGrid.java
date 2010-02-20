@@ -1,6 +1,10 @@
 package huippu.mobile;
 
+import java.io.DataInputStream;
+import java.io.IOException;
+
 import huippu.common.Cell;
+import huippu.common.Dude;
 import huippu.common.DudeGrid;
 
 import javax.microedition.lcdui.Graphics;
@@ -11,6 +15,25 @@ final class MobileDudeGrid extends DudeGrid
     {
         super( pColumnCount, pRowCount, MobileDude.DUDE_COUNT );
     }
+    
+    public MobileDudeGrid( final DataInputStream pInput )
+        throws IOException
+    {
+        super( MobileDude.DUDE_COUNT, pInput );
+        mIsGridEmpty = true;
+        for ( int x = 0; x < mColumnCount; x++ )
+        {
+            for ( int y = 0; y < mRowCount; y++ )
+            {
+                final byte id = pInput.readByte();
+                if ( id != Dude.INVALID_ID )
+                {
+                    mIsGridEmpty = false;
+                    putDude( id, x, y );
+                }
+            }
+        }
+    }
 
     public final void fillWithDudes( final int pLevel )
     {
@@ -20,13 +43,17 @@ final class MobileDudeGrid extends DudeGrid
         {
             for ( int y = 0; y < mRowCount; y++ )
             {
-                final MobileDude newDude =
-                    MobileDude.getDude( getNextDudeId( x, y ) );
-                newDude.setCellPosition( new Cell( x, y ) );
-                newDude.updateScreenPosition();
-                mDudes[ x ][ y ] = newDude;
+                putDude( getNextDudeId( x, y ), x, y );
             }
         }
+    }
+    
+    private final void putDude( final int pDudeId, final int pX, final int pY )
+    {
+        final MobileDude newDude = MobileDude.getDude( pDudeId );
+        newDude.setCellPosition( new Cell( pX, pY ) );
+        newDude.updateScreenPosition();
+        mDudes[ pX ][ pY ] = newDude;
     }
     
     public final void drawDudesAll( final Object pGraphics )

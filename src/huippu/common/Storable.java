@@ -34,4 +34,19 @@ public abstract class Storable
         
         return data;
     }
+    
+    protected static final byte[] getDataByte( final int pValue )
+    {
+        final byte[] data = new byte[ 1 ];
+        data[ 0 ] = (byte) pValue;
+        return data;
+    }
+    
+    protected static final int appendData( final byte[] pData,
+                                           final byte[] pBuffer,
+                                           final int pBufferOffset )
+    {
+        System.arraycopy( pData, 0, pBuffer, pBufferOffset, pData.length );
+        return pBufferOffset + pData.length;
+    }
 }

@@ -1,8 +1,11 @@
 package huippu.common;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.Random;
 
 public abstract class DudeGrid
+    extends Storable
 {
     private static final int INVALID_COLUMN = -1;
     
@@ -24,7 +27,7 @@ public abstract class DudeGrid
     private final int mMaxRandomValue;
     
     protected final Dude[][] mDudes;
-    private boolean mIsGridEmpty = false;
+    protected boolean mIsGridEmpty = false;
     
     protected final boolean[][] mRemovable;
     protected int mRemovableFirstCol = INVALID_COLUMN;
@@ -45,6 +48,49 @@ public abstract class DudeGrid
                           - ( BASIC_MAX_RANDOM_VALUE % mDudeCount );
         mProportionBasic = mMaxRandomValue / mDudeCount;
     }
+    
+    public DudeGrid( final int pDudeCount, final DataInputStream pInput )
+        throws IOException
+    {
+        this( pInput.readByte(), pInput.readByte(), pDudeCount );
+    }
+    
+    public final byte[] getAsBytes()
+        throws IOException
+    {
+        // Convert all values to byte data
+        final byte[] dataColumnCount = getDataByte( mColumnCount );
+        final byte[] dataRowCount = getDataByte( mRowCount );
+
+        final byte[] dataGrid = new byte[ mColumnCount * mRowCount ];
+        for ( int x = 0; x < mColumnCount; x++ )
+        {
+            for ( int y = 0; y < mRowCount; y++ )
+            {
+                int id = Dude.INVALID_ID;
+                final Dude dude = mDudes[ x ][ y ]; 
+                if ( dude != null )
+                {
+                    id = dude.getId();
+                }
+                dataGrid[ ( x * mRowCount ) + y ] = (byte) id;
+            }
+        }
+        
+        // Append all data to a continuous byte array
+        final byte[] data = new byte[   dataColumnCount.length
+                                      + dataRowCount.length
+                                      + dataGrid.length ];
+        
+        int offset = 0;
+        
+        offset = appendData( dataColumnCount, data, offset );
+        offset = appendData( dataRowCount, data, offset );
+        
+        offset = appendData( dataGrid, data, offset );
+        
+        return data;
+    }    
 
     public abstract void fillWithDudes( final int pLevel );
 

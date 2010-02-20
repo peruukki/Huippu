@@ -4,7 +4,6 @@ import huippu.common.HallOfFame;
 import huippu.common.Resources;
 import huippu.common.Score;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -107,43 +106,12 @@ final class MobileHallOfFame extends HallOfFame
         return success;
     }
     
-    private static final RecordStore openStore( final String pStoreName )
-    {
-        RecordStore store = null;
-        try
-        {
-            store = RecordStore.openRecordStore( pStoreName, false );
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error( "Failed to open store " + pStoreName, e );
-            closeStore( store );
-            store = null;
-        }
-        return store;
-    }
-    
-    private static final void closeStore( final RecordStore pStore )
-    {
-        if ( pStore != null )
-        {
-            try
-            {
-                pStore.closeRecordStore();
-            }
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error( "Failed to close store " + pStore, e );
-            }
-        }
-    }
-    
     private static final boolean writeToStore( final String pStoreName,
                                                final Score[] pValues )
     {
         boolean success = false;
         
-        final RecordStore store = openStore( pStoreName );
+        final RecordStore store = MobileStorable.openStore( pStoreName, false, true );
         if ( store != null )
         {
             try
@@ -166,7 +134,7 @@ final class MobileHallOfFame extends HallOfFame
             }
             finally
             {
-                closeStore( store );
+                MobileStorable.closeStore( store );
             }
         }
         
@@ -276,113 +244,89 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void readScoresLevel()
     {
-        try
+        mStoreScoresLevel =
+            MobileStorable.openStore( STORE_SCORES_LEVEL, true, false );
+        if ( mStoreScoresLevel != null )
         {
-            mStoreScoresLevel =
-                RecordStore.openRecordStore( STORE_SCORES_LEVEL, true );
-            if ( mStoreScoresLevel.getNumRecords () == 0 )
+            try
             {
-                initializeStore( mStoreScoresLevel, mScoresLevel.getValues() );
-            }
-            else
+                if ( mStoreScoresLevel.getNumRecords () == 0 )
+                {
+                    initializeStore( mStoreScoresLevel, mScoresLevel.getValues() );
+                }
+                else
+                {
+                    mScoresLevel.setValues( readScores( mStoreScoresLevel,
+                                            mScoresLevel.size() ) );
+                }
+            }        
+            catch ( final RecordStoreException e )
             {
-                mScoresLevel.setValues( readScores( mStoreScoresLevel,
-                                                    mScoresLevel.size() ) );
+                MobileMain.error(   "Failed to read from store "
+                                  + STORE_SCORES_LEVEL, e );
             }
-        }        
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to read from store "
-                              + STORE_SCORES_LEVEL, e );
         }
         
-        try
-        {
-            mStoreScoresLevel.closeRecordStore();
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to close store "
-                              + STORE_SCORES_LEVEL, e );
-        }
-        finally
-        {
-            mStoreScoresLevel = null;
-        }
+        MobileStorable.closeStore( mStoreScoresLevel );
+        mStoreScoresLevel = null;
     }
     
     private final void readScoresTotal()
     {
-        try
+        mStoreScoresTotal =
+            MobileStorable.openStore( STORE_SCORES_TOTAL, true, false );
+        if ( mStoreScoresTotal != null )
         {
-            mStoreScoresTotal =
-                RecordStore.openRecordStore( STORE_SCORES_TOTAL, true );
-            if ( mStoreScoresTotal.getNumRecords () == 0 )
+            try
             {
-                initializeStore( mStoreScoresTotal, mScoresTotal.getValues() );
-            }
-            else
+                if ( mStoreScoresTotal.getNumRecords () == 0 )
+                {
+                    initializeStore( mStoreScoresTotal, mScoresTotal.getValues() );
+                }
+                else
+                {
+                    mScoresTotal.setValues( readScores( mStoreScoresTotal,
+                                                        mScoresTotal.size() ) );
+                }
+            }        
+            catch ( final RecordStoreException e )
             {
-                mScoresTotal.setValues( readScores( mStoreScoresTotal,
-                                                    mScoresTotal.size() ) );
+                MobileMain.error(   "Failed to read from store "
+                                  + STORE_SCORES_TOTAL, e );
             }
-        }        
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to read from store "
-                              + STORE_SCORES_TOTAL, e );
         }
         
-        try
-        {
-            mStoreScoresTotal.closeRecordStore();
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to close store "
-                              + STORE_SCORES_TOTAL, e );
-        }
-        finally
-        {
-            mStoreScoresTotal = null;
-        }
+        MobileStorable.closeStore( mStoreScoresTotal );
+        mStoreScoresTotal = null;
     }
     
     private final void readRemovesLevel()
     {
-        try
+        mStoreRemovesLevel =
+            MobileStorable.openStore( STORE_REMOVES_LEVEL, true, false );
+        if ( mStoreRemovesLevel != null )
         {
-            mStoreRemovesLevel =
-                RecordStore.openRecordStore( STORE_REMOVES_LEVEL, true );
-            if ( mStoreRemovesLevel.getNumRecords () == 0 )
+            try
             {
-                initializeStore( mStoreRemovesLevel, mRemovesLevel.getValues() );
-            }
-            else
+                if ( mStoreRemovesLevel.getNumRecords () == 0 )
+                {
+                    initializeStore( mStoreRemovesLevel, mRemovesLevel.getValues() );
+                }
+                else
+                {
+                    mRemovesLevel.setValues( readScores( mStoreRemovesLevel,
+                                                         mRemovesLevel.size() ) );
+                }
+            }        
+            catch ( final RecordStoreException e )
             {
-                mRemovesLevel.setValues( readScores( mStoreRemovesLevel,
-                                                     mRemovesLevel.size() ) );
+                MobileMain.error(   "Failed to read from store "
+                                  + STORE_REMOVES_LEVEL, e );
             }
-        }        
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to read from store "
-                              + STORE_REMOVES_LEVEL, e );
         }
         
-        try
-        {
-            mStoreRemovesLevel.closeRecordStore();
-        }
-        catch ( final RecordStoreException e )
-        {
-            MobileMain.error(   "Failed to close store "
-                              + STORE_REMOVES_LEVEL, e );
-        }
-        finally
-        {
-            mStoreRemovesLevel = null;
-        }
+        MobileStorable.closeStore( mStoreRemovesLevel );
+        mStoreRemovesLevel = null;
     }
     
     private static final Score[] readScores( final RecordStore pStore,
@@ -393,7 +337,7 @@ final class MobileHallOfFame extends HallOfFame
         
         for ( int i = 0; i < values.length; i++ )
         {
-           final DataInputStream dis = getDataStream( pStore, i + 1 );
+           final DataInputStream dis = MobileStorable.getDataStream( pStore, i + 1 );
            if ( dis != null )
            {
                try
@@ -410,21 +354,6 @@ final class MobileHallOfFame extends HallOfFame
         }
         
         return values;
-    }
-    
-    private static final DataInputStream getDataStream( final RecordStore pStore,
-                                                        final int pRecordId )
-        throws RecordStoreException
-    {
-       DataInputStream dis = null;
-        
-        final byte[] data = pStore.getRecord( pRecordId );
-        if ( data != null )
-        {
-           dis = new DataInputStream( new ByteArrayInputStream( data ) );
-        }
-        
-        return dis;
     }
 
     public final void commandAction( final Command pCommand,

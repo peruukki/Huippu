@@ -8,6 +8,7 @@ public final class GameState
     extends Storable
 {
     private final DudeGrid mDudeGrid;
+    private boolean mInitFromStore;
 
     private int mScoreLevel = 0;
     private int mScoreTotal = 0;
@@ -18,21 +19,60 @@ public final class GameState
     public GameState( final DudeGrid pDudeGrid )
     {
         mDudeGrid = pDudeGrid;
+        mInitFromStore = false;
     }
     
-    public GameState( final DataInputStream pInput )
+    public GameState( final DudeGrid pDudeGrid, final DataInputStream pInput )
         throws IOException
     {
-        super( pInput );
-        // TODO: Set all instance variables from pInput
-        mDudeGrid = null;
+        mDudeGrid = pDudeGrid; 
+        
+        mScoreTotal = pInput.readInt();
+        mScoreLevel = pInput.readInt();
+        mRemoveCountLevel = pInput.readInt();
+        mLevel = pInput.readInt();
+        
+        mInitFromStore = true;
     }
     
     public byte[] getAsBytes()
         throws IOException
     {
-        // TODO: Convert instance variable values to byte data
-        return null;
+        // Convert all values to byte data
+        final byte[] dataDudeGrid = mDudeGrid.getAsBytes();
+        
+        final byte[] dataScoreTotal = getDataInt( mScoreTotal );
+        final byte[] dataScoreLevel = getDataInt( mScoreLevel );
+        final byte[] dataRemoveCountLevel = getDataInt( mRemoveCountLevel );
+        final byte[] dataLevel = getDataInt( mLevel );
+        
+        // Append all data to a continuous byte array
+        final byte[] data = new byte[   dataDudeGrid.length
+                                      + dataScoreTotal.length
+                                      + dataScoreLevel.length
+                                      + dataRemoveCountLevel.length
+                                      + dataLevel.length ];
+        
+        int offset = 0;
+        
+        offset = appendData( dataDudeGrid, data, offset );
+        
+        offset = appendData( dataScoreTotal, data, offset );
+        offset = appendData( dataScoreLevel, data, offset );
+        offset = appendData( dataRemoveCountLevel, data, offset );
+        offset = appendData( dataLevel, data, offset );
+        
+        return data;
+    }
+    
+    public final boolean isRestored()
+    {
+        return mInitFromStore;
+    }
+    
+    public final void clearRestored()
+    {
+        mInitFromStore = false;
     }
     
     public final DudeGrid getDudeGrid()

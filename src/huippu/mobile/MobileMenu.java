@@ -51,7 +51,7 @@ final class MobileMenu
     {
         if ( pC == mCmdRestart )
         {
-            mDrome.dromeFinished( false );
+            mDrome.dromeFinished( false, false );
             mDrome.restart();
         }
         else if ( pC == mCmdNextLevel )
@@ -64,7 +64,7 @@ final class MobileMenu
         }
         else if ( pC == mCmdExit )
         {
-            mDrome.dromeFinished( false );
+            mDrome.gameExiting();
             mApplication.exitApplication();
         }
     }

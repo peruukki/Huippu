@@ -118,7 +118,8 @@ public final class MobileMain
     
     public static void error( final String pMsg, final Throwable pE )
     {
-        mCurrentScreen = Display.getDisplay( mMIDlet ).getCurrent();
+        mCurrentScreen = Display.getDisplay( mMIDlet )
+                                .getCurrent();
         
         String message = pMsg;
         if ( pE != null )
@@ -139,11 +140,13 @@ public final class MobileMain
             }
         });
         
-        Display.getDisplay( mMIDlet ).setCurrent( alert, mCurrentScreen );
+        Display.getDisplay( mMIDlet )
+               .setCurrent( alert, mCurrentScreen );
     }
 
     private static final void closeAlert()
     {
-        Display.getDisplay( mMIDlet ).setCurrent( mCurrentScreen );
+        Display.getDisplay( mMIDlet )
+               .setCurrent( mCurrentScreen );
     }
 }

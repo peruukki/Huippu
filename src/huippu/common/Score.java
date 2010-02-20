@@ -29,12 +29,33 @@ public final class Score
     public Score( final DataInputStream pInput )
         throws IOException
     {
-        super( pInput );
         mValue = pInput.readInt();
         mLevel = pInput.readInt();
         mDate = new ScoreDate( pInput.readByte(),
                                pInput.readByte(),
                                pInput.readByte() );
+    }
+    
+    public byte[] getAsBytes()
+        throws IOException
+    {
+        // Convert all values to byte data
+        final byte[] dataValue = getDataInt( mValue );
+        final byte[] dataLevel = getDataInt( mLevel );
+        final byte[] dataDate = mDate.getAsBytes();
+        
+        // Append all data to a continuous byte array
+        final byte[] data = new byte[   dataValue.length
+                                      + dataLevel.length
+                                      + dataDate.length ];
+        
+        int offset = 0;
+        
+        offset = appendData( dataValue, data, offset );
+        offset = appendData( dataLevel, data, offset );
+        offset = appendData( dataDate, data, offset );
+        
+        return data;
     }
     
     public int getValue()
@@ -52,49 +73,31 @@ public final class Score
         return mDate;
     }
     
-    public byte[] getAsBytes()
-        throws IOException
-    {
-        final byte[] dataValue = getDataInt( mValue );
-        final byte[] dataLevel = getDataInt( mLevel );
-        final byte[] dataDate = mDate.getAsBytes();
-        final byte[] data = new byte[   dataValue.length
-                                      + dataLevel.length
-                                      + dataDate.length ];
-        int offset = 0;
-        System.arraycopy( dataValue, 0, data, offset, dataValue.length );
-        offset += dataValue.length;
-        System.arraycopy( dataLevel, 0, data, offset, dataLevel.length );
-        offset += dataLevel.length;
-        System.arraycopy( dataDate, 0, data, offset, dataDate.length );
-        return data;
-    }
-    
     private static final Score[] mScoresTotal = new Score[]
     {
-        new Score(   50,  1, new ScoreDate(  2,  2, 2010 ) ),
-        new Score(   40,  1, new ScoreDate(  2,  2, 2010 ) ),
-        new Score(   30,  1, new ScoreDate(  5,  2, 2010 ) ),
-        new Score(),
-        new Score()
+        new Score( 512, 5, new ScoreDate( 20,  2, 10 ) ),
+        new Score( 425, 4, new ScoreDate( 19,  2, 10 ) ),
+        new Score( 418, 4, new ScoreDate(  9,  2, 10 ) ),
+        new Score( 400, 4, new ScoreDate( 12,  2, 10 ) ),
+        new Score( 390, 4, new ScoreDate( 19,  2, 10 ) ),
     };
     
     private static final Score[] mScoresLevel = new Score[]
     {
-        new Score(  20,  1, new ScoreDate(  1,  1, 2010 ) ),
-        new Score(  19,  1, new ScoreDate( 30,  1, 2010 ) ),
-        new Score(  18,  1, new ScoreDate( 22, 12, 2009 ) ),
-        new Score(),
-        new Score()
+        new Score( 133, 1, new ScoreDate(  9,  2, 10 ) ),
+        new Score( 125, 1, new ScoreDate( 10,  2, 10 ) ),
+        new Score( 124, 1, new ScoreDate( 19,  2, 10 ) ),
+        new Score( 124, 1, new ScoreDate( 10,  2, 10 ) ),
+        new Score( 121, 1, new ScoreDate( 13,  2, 10 ) ),
     };
     
     private static final Score[] mRemovesLevel = new Score[]
     {
-        new Score( 11,  1, new ScoreDate(  2,  2, 2010 ) ),
-        new Score( 12,  1, new ScoreDate(  2,  2, 2010 ) ),
-        new Score( 13,  1, new ScoreDate(  1, 11, 2009 ) ),
-        new Score( 14,  1, new ScoreDate(  9,  2, 2010 ) ),
-        new Score()
+        new Score(  7,  1, new ScoreDate(  9,  2, 10 ) ),
+        new Score( 10,  1, new ScoreDate( 19,  2, 10 ) ),
+        new Score( 10,  1, new ScoreDate( 10,  2, 10 ) ),
+        new Score( 11,  1, new ScoreDate( 13,  2, 10 ) ),
+        new Score( 12,  1, new ScoreDate( 19,  2, 10 ) ),
     };
     
     static final Score[] getInitialScoresTotal()

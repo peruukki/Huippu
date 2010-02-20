@@ -9,17 +9,23 @@ import huippu.common.Resources;
 import huippu.common.Score;
 import huippu.common.ScoreDate;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.Date;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.rms.RecordStore;
+import javax.microedition.rms.RecordStoreException;
 
 final class MobileDrome
 	extends Canvas
 	implements Runnable
 {
+    private static final String STORE_GAME_STATE = "GameState";
+    
     private static final int TEXT_OFFSET = 2;
     
     private static final Font FONT =
@@ -60,21 +66,74 @@ final class MobileDrome
         mMenu = new MobileMenu( pApplication, this );
         DromeComponent.setGridSize( mColumnCount, mRowCount );
         mPointer = new MobilePointer();
-        mState = new GameState( new MobileDudeGrid( mColumnCount, mRowCount ) );
+        mState = getInitialState();
         setFullScreenMode( true );
         reinit();
         sizeChanged( getWidth(), getHeight() );
     }
     
+    private final GameState getInitialState()
+    {
+        GameState state = null;
+        
+        // Try to read stored game state first
+        RecordStore store = MobileStorable.openStore( STORE_GAME_STATE, false, false );
+        if ( store != null )
+        {
+            try
+            {
+                final DataInputStream data = MobileStorable.getDataStream( store, 1 );
+                final MobileDudeGrid dudeGrid = new MobileDudeGrid( data );
+                state = new GameState( dudeGrid, data );
+            }
+            catch ( final RecordStoreException e )
+            {
+                MobileMain.error( "Failed to read from game state store", e );
+            }
+            catch ( final IOException e )
+            {
+                MobileMain.error( "Failed to read from game state store", e );
+            }
+            finally
+            {
+                MobileStorable.closeStore( store );
+                MobileStorable.deleteStore( STORE_GAME_STATE );
+            }
+        }
+        else
+        {
+            // Create new uninitialized DudeGrid
+            state = new GameState( new MobileDudeGrid( mColumnCount,
+                                                       mRowCount ) );
+        }
+        
+        return state;
+    }
+    
     private final void reinit()
     {
         initPointer();
-        initDudes();
-        mState.setScoreLevel( 0 );
-        mState.setRemoveCountLevel( 0 );
         mFinishedString = null;
         mFinished = false;
         mMenu.setNextLevelEnabled( false );
+        
+        if ( mState.isRestored() )
+        {
+            mState.clearRestored();
+            if ( mState.getDudeGrid()
+                       .allDudesRemoved() )
+            {
+                dromeFinished( true, true );
+            }
+        }
+        else
+        {
+            initDudes();
+            mState.setScoreLevel( 0 );
+            mState.setRemoveCountLevel( 0 );
+        }
+        mState.getDudeGrid()
+              .setCurrentCell( mPointer.getCell() );
     }
     
     protected final void sizeChanged( final int pWidth, final int pHeight )
@@ -112,7 +171,6 @@ final class MobileDrome
     {
         final DudeGrid dudeGrid = mState.getDudeGrid(); 
         dudeGrid.fillWithDudes( mState.getLevel() );
-        dudeGrid.setCurrentCell( mPointer.getCell() );
     }
 
     /**
@@ -358,16 +416,19 @@ final class MobileDrome
 
         if ( dromeFinished )
         {
-            dromeFinished( dromeFinishSuccess );
+            dromeFinished( dromeFinishSuccess, false );
         }
     }
 
-    final void dromeFinished( final boolean pSuccess )
+    final void dromeFinished( final boolean pSuccess, final boolean pInitialState )
     {
         if ( !mFinished )
         {
             mFinished = true;
-            updateLevelStats( pSuccess );
+            if ( !pInitialState )
+            {
+                updateLevelStats( pSuccess );
+            }
             
             if ( pSuccess )
             {
@@ -377,10 +438,47 @@ final class MobileDrome
             else
             {
                 mFinishedString = Resources.TEXT_FINISHED_FAIL;
-                updateTotalStats();
+                if ( !pInitialState )
+                {
+                    updateTotalStats();
+                }
             }
             
-            repaint();
+            if ( !pInitialState )
+            {
+                repaint();
+            }
+        }
+    }
+    
+    final void gameExiting()
+    {
+        MobileStorable.deleteStore( STORE_GAME_STATE );
+        if ( !(    mFinished
+                && mFinishedString.equals( Resources.TEXT_FINISHED_FAIL ) ) )
+        {
+            final RecordStore store =
+                MobileStorable.openStore( STORE_GAME_STATE, true, false );
+            if ( store != null )
+            {
+                try
+                {
+                    final byte[] data = mState.getAsBytes();
+                    store.addRecord( data, 0, data.length );
+                }
+                catch ( final RecordStoreException e )
+                {
+                    MobileMain.error( "Failed to store game state", e );
+                }
+                catch ( final IOException e )
+                {
+                    MobileMain.error( "Failed to store game state", e );
+                }
+                finally
+                {
+                    MobileStorable.closeStore( store );
+                }
+            }
         }
     }
 
