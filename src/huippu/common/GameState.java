@@ -5,16 +5,17 @@ import java.io.IOException;
 
 
 public final class GameState
-    extends Storable
+    implements IStorable
 {
     private final DudeGrid mDudeGrid;
-    private boolean mInitFromStore;
 
     private int mScoreLevel = 0;
     private int mScoreTotal = 0;
     private int mRemoveCountLevel = 0;
     
     private int mLevel = 1;
+    
+    private boolean mInitFromStore;
     
     public GameState( final DudeGrid pDudeGrid )
     {
@@ -25,7 +26,7 @@ public final class GameState
     public GameState( final DudeGrid pDudeGrid, final DataInputStream pInput )
         throws IOException
     {
-        mDudeGrid = pDudeGrid; 
+        mDudeGrid = pDudeGrid;
         
         mScoreTotal = pInput.readInt();
         mScoreLevel = pInput.readInt();
@@ -41,10 +42,10 @@ public final class GameState
         // Convert all values to byte data
         final byte[] dataDudeGrid = mDudeGrid.getAsBytes();
         
-        final byte[] dataScoreTotal = getDataInt( mScoreTotal );
-        final byte[] dataScoreLevel = getDataInt( mScoreLevel );
-        final byte[] dataRemoveCountLevel = getDataInt( mRemoveCountLevel );
-        final byte[] dataLevel = getDataInt( mLevel );
+        final byte[] dataScoreTotal = Storable.getDataInt( mScoreTotal );
+        final byte[] dataScoreLevel = Storable.getDataInt( mScoreLevel );
+        final byte[] dataRemoveCountLevel = Storable.getDataInt( mRemoveCountLevel );
+        final byte[] dataLevel = Storable.getDataInt( mLevel );
         
         // Append all data to a continuous byte array
         final byte[] data = new byte[   dataDudeGrid.length
@@ -55,12 +56,12 @@ public final class GameState
         
         int offset = 0;
         
-        offset = appendData( dataDudeGrid, data, offset );
+        offset = Storable.appendData( dataDudeGrid, data, offset );
         
-        offset = appendData( dataScoreTotal, data, offset );
-        offset = appendData( dataScoreLevel, data, offset );
-        offset = appendData( dataRemoveCountLevel, data, offset );
-        offset = appendData( dataLevel, data, offset );
+        offset = Storable.appendData( dataScoreTotal, data, offset );
+        offset = Storable.appendData( dataScoreLevel, data, offset );
+        offset = Storable.appendData( dataRemoveCountLevel, data, offset );
+        offset = Storable.appendData( dataLevel, data, offset );
         
         return data;
     }

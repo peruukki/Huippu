@@ -6,7 +6,7 @@ import java.io.IOException;
 
 
 public final class Score
-    extends Storable
+    implements IStorable
 {
     private static final boolean mUseAllZero = true;
     
@@ -40,8 +40,8 @@ public final class Score
         throws IOException
     {
         // Convert all values to byte data
-        final byte[] dataValue = getDataInt( mValue );
-        final byte[] dataLevel = getDataInt( mLevel );
+        final byte[] dataValue = Storable.getDataInt( mValue );
+        final byte[] dataLevel = Storable.getDataInt( mLevel );
         final byte[] dataDate = mDate.getAsBytes();
         
         // Append all data to a continuous byte array
@@ -51,9 +51,9 @@ public final class Score
         
         int offset = 0;
         
-        offset = appendData( dataValue, data, offset );
-        offset = appendData( dataLevel, data, offset );
-        offset = appendData( dataDate, data, offset );
+        offset = Storable.appendData( dataValue, data, offset );
+        offset = Storable.appendData( dataLevel, data, offset );
+        offset = Storable.appendData( dataDate, data, offset );
         
         return data;
     }

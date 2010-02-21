@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 public abstract class DudeGrid
-    extends Storable
+    implements IStorable
 {
     private static final int INVALID_COLUMN = -1;
     
@@ -59,8 +59,8 @@ public abstract class DudeGrid
         throws IOException
     {
         // Convert all values to byte data
-        final byte[] dataColumnCount = getDataByte( mColumnCount );
-        final byte[] dataRowCount = getDataByte( mRowCount );
+        final byte[] dataColumnCount = Storable.getDataByte( mColumnCount );
+        final byte[] dataRowCount = Storable.getDataByte( mRowCount );
 
         final byte[] dataGrid = new byte[ mColumnCount * mRowCount ];
         for ( int x = 0; x < mColumnCount; x++ )
@@ -84,10 +84,10 @@ public abstract class DudeGrid
         
         int offset = 0;
         
-        offset = appendData( dataColumnCount, data, offset );
-        offset = appendData( dataRowCount, data, offset );
+        offset = Storable.appendData( dataColumnCount, data, offset );
+        offset = Storable.appendData( dataRowCount, data, offset );
         
-        offset = appendData( dataGrid, data, offset );
+        offset = Storable.appendData( dataGrid, data, offset );
         
         return data;
     }    
