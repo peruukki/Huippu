@@ -56,15 +56,17 @@ abstract class MobileDude extends Dude
         draw( pG, 1, 1 );
     }
     
-    void draw( final Graphics pG )
+    public final void draw( final Object pGraphics )
     {
+        final Graphics g = (Graphics) pGraphics;
+        
         // Draw shadow
-        pG.setColor( COLOR_SHADOW );
-        draw( pG, 1, 1 );
+        g.setColor( COLOR_SHADOW );
+        draw( g, 1, 1 );
         
         // Draw Dude
-        pG.setColor( mColorDraw );
-        draw( pG, 0, 0 );
+        g.setColor( mColorDraw );
+        draw( g, 0, 0 );
     }
     
     protected abstract void draw( final Graphics pG, final int pOffsetX,

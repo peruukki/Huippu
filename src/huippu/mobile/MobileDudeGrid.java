@@ -52,7 +52,6 @@ final class MobileDudeGrid extends DudeGrid
     {
         final MobileDude newDude = MobileDude.getDude( pDudeId );
         newDude.setCellPosition( new Cell( pX, pY ) );
-        newDude.updateScreenPosition();
         mDudes[ pX ][ pY ] = newDude;
     }
     

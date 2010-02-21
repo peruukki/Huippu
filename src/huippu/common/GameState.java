@@ -8,6 +8,7 @@ public final class GameState
     implements IStorable
 {
     private final DudeGrid mDudeGrid;
+    private final Pointer mPointer;
 
     private int mScoreLevel = 0;
     private int mScoreTotal = 0;
@@ -17,16 +18,19 @@ public final class GameState
     
     private boolean mInitFromStore;
     
-    public GameState( final DudeGrid pDudeGrid )
+    public GameState( final DudeGrid pDudeGrid, final Pointer pPointer )
     {
         mDudeGrid = pDudeGrid;
+        mPointer = pPointer;
         mInitFromStore = false;
     }
     
-    public GameState( final DudeGrid pDudeGrid, final DataInputStream pInput )
+    public GameState( final DudeGrid pDudeGrid, final Pointer pPointer,
+                      final DataInputStream pInput )
         throws IOException
     {
         mDudeGrid = pDudeGrid;
+        mPointer = pPointer;
         
         mScoreTotal = pInput.readInt();
         mScoreLevel = pInput.readInt();
@@ -41,6 +45,7 @@ public final class GameState
     {
         // Convert all values to byte data
         final byte[] dataDudeGrid = mDudeGrid.getAsBytes();
+        final byte[] dataPointer = mPointer.getAsBytes();
         
         final byte[] dataScoreTotal = Storable.getDataInt( mScoreTotal );
         final byte[] dataScoreLevel = Storable.getDataInt( mScoreLevel );
@@ -49,6 +54,7 @@ public final class GameState
         
         // Append all data to a continuous byte array
         final byte[] data = new byte[   dataDudeGrid.length
+                                      + dataPointer.length 
                                       + dataScoreTotal.length
                                       + dataScoreLevel.length
                                       + dataRemoveCountLevel.length
@@ -57,6 +63,7 @@ public final class GameState
         int offset = 0;
         
         offset = Storable.appendData( dataDudeGrid, data, offset );
+        offset = Storable.appendData( dataPointer, data, offset );
         
         offset = Storable.appendData( dataScoreTotal, data, offset );
         offset = Storable.appendData( dataScoreLevel, data, offset );
@@ -79,6 +86,11 @@ public final class GameState
     public final DudeGrid getDudeGrid()
     {
         return mDudeGrid;
+    }
+    
+    public final Pointer getPointer()
+    {
+        return mPointer;
     }
 
     public final int getScoreLevel()

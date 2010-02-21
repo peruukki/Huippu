@@ -14,6 +14,8 @@ public abstract class DromeComponent
     protected int mScreenX;
     protected int mScreenY;
     
+    public abstract void draw( final Object pGraphics );
+    
     public static void setGridSize( final int pColumnCount, final int pRowCount )
     {
         mColumnCount = pColumnCount;
@@ -29,6 +31,7 @@ public abstract class DromeComponent
     public final void setCellPosition( final Cell pCell )
     {
         mCell = pCell;
+        updateScreenPosition();
     }
     
     public final Cell getCell()

@@ -1,22 +1,40 @@
 package huippu.mobile;
 
+import huippu.common.Cell;
 import huippu.common.Pointer;
+
+import java.io.DataInputStream;
+import java.io.IOException;
 
 import javax.microedition.lcdui.Graphics;
 
-final class MobilePointer extends Pointer
+final class MobilePointer
+    extends Pointer
 {
     private static final int COLOR_DRAW = 0x00FF7799;
-
-    public void draw( final Graphics pG )
+    
+    public MobilePointer()
     {
-        pG.setColor( COLOR_DRAW );
-        drawPointer( pG );
+        this( new Cell( 0, 0 ) );
+    }
+    
+    public MobilePointer( final DataInputStream pInput )
+        throws IOException
+    {
+        this( new Cell( pInput.readByte(), pInput.readByte() ) );
+    }
+    
+    private MobilePointer( final Cell pCell )
+    {
+        super();
+        setCellPosition( pCell );
     }
 
-    public void moveLeft( final int pCellCount )
+    public void draw( final Object pGraphics )
     {
-        super.moveLeft( pCellCount );
+        final Graphics g = (Graphics) pGraphics;
+        g.setColor( COLOR_DRAW );
+        drawPointer( g );
     }
     
     private void drawPointer( final Graphics pG )

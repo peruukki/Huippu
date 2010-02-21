@@ -5,6 +5,7 @@ import huippu.common.DromeComponent;
 import huippu.common.Dude;
 import huippu.common.DudeGrid;
 import huippu.common.GameState;
+import huippu.common.Pointer;
 import huippu.common.Resources;
 import huippu.common.Score;
 import huippu.common.ScoreDate;
@@ -54,7 +55,6 @@ final class MobileDrome
     
     private final Display mDisplay;
     private final MobileMenu mMenu;
-    private final MobilePointer mPointer;
     private final GameState mState;
     
     private String mFinishedString = null;
@@ -65,7 +65,6 @@ final class MobileDrome
         mDisplay = Display.getDisplay( pApplication );
         mMenu = new MobileMenu( pApplication, this );
         DromeComponent.setGridSize( mColumnCount, mRowCount );
-        mPointer = new MobilePointer();
         mState = getInitialState();
         setFullScreenMode( true );
         reinit();
@@ -84,7 +83,8 @@ final class MobileDrome
             {
                 final DataInputStream data = MobileStorable.getDataStream( store, 1 );
                 final MobileDudeGrid dudeGrid = new MobileDudeGrid( data );
-                state = new GameState( dudeGrid, data );
+                final MobilePointer pointer = new MobilePointer( data );
+                state = new GameState( dudeGrid, pointer, data );
             }
             catch ( final RecordStoreException e )
             {
@@ -104,7 +104,8 @@ final class MobileDrome
         {
             // Create new uninitialized DudeGrid
             state = new GameState( new MobileDudeGrid( mColumnCount,
-                                                       mRowCount ) );
+                                                       mRowCount ),
+                                   new MobilePointer() );
         }
         
         return state;
@@ -112,7 +113,6 @@ final class MobileDrome
     
     private final void reinit()
     {
-        initPointer();
         mFinishedString = null;
         mFinished = false;
         mMenu.setNextLevelEnabled( false );
@@ -128,12 +128,14 @@ final class MobileDrome
         }
         else
         {
+            initPointer();
             initDudes();
             mState.setScoreLevel( 0 );
             mState.setRemoveCountLevel( 0 );
         }
         mState.getDudeGrid()
-              .setCurrentCell( mPointer.getCell() );
+              .setCurrentCell( mState.getPointer()
+                                     .getCell() );
     }
     
     protected final void sizeChanged( final int pWidth, final int pHeight )
@@ -141,7 +143,8 @@ final class MobileDrome
         initDrome( pWidth - REDUCE_WIDTH, pHeight - REDUCE_HEIGHT );
         DromeComponent.setCellSize( mCellWidth, mCellHeight );
         Dude.updateSize();
-        mPointer.updateScreenPosition();
+        mState.getPointer()
+              .updateScreenPosition();
         mState.getDudeGrid()
               .updateDudePositions();
     }
@@ -163,8 +166,8 @@ final class MobileDrome
     
     private final void initPointer()
     {
-        mPointer.setCellPosition( new Cell( 0, 0 ) );
-        mPointer.updateScreenPosition();
+        mState.getPointer()
+              .setCellPosition( new Cell( 0, 0 ) );
     }
         
     private final void initDudes()
@@ -193,7 +196,8 @@ final class MobileDrome
         pG.translate( mDromeOffsetX, mDromeOffsetY );
 
         drawDudes( pG );
-        mPointer.draw( pG );
+        mState.getPointer()
+              .draw( pG );
         drawFinishedString( pG );
 
         pG.translate( -mDromeOffsetX, -mDromeOffsetY );
@@ -355,22 +359,23 @@ final class MobileDrome
         boolean updateCurrentCell = true;
         boolean dromeFinished = false;
         boolean dromeFinishSuccess = false;
+        final Pointer pointer = mState.getPointer();
         switch ( gameAction )
         {
             case Canvas.UP:
-                mPointer.moveUp( 1 );
+                pointer.moveUp( 1 );
                 break;
 
             case Canvas.DOWN:
-                mPointer.moveDown( 1 );
+                pointer.moveDown( 1 );
                 break;
 
             case Canvas.LEFT:
-                mPointer.moveLeft( 1 );
+                pointer.moveLeft( 1 );
                 break;
 
             case Canvas.RIGHT:
-                mPointer.moveRight( 1 );
+                pointer.moveRight( 1 );
                 break;
 
             case Canvas.FIRE:
@@ -406,7 +411,7 @@ final class MobileDrome
         if ( updateCurrentCell )
         {
             mState.getDudeGrid()
-                  .setCurrentCell( mPointer.getCell() );
+                  .setCurrentCell( pointer.getCell() );
         }
 
         if ( repaint )
