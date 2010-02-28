@@ -13,6 +13,8 @@ import huippu.common.ScoreDate;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Display;
@@ -32,6 +34,9 @@ final class MobileDrome
     private static final Font FONT =
         Font.getFont( Font.FACE_PROPORTIONAL, Font.STYLE_PLAIN, Font.SIZE_SMALL );
 
+    private static final Font FONT_BOLD_LARGE =
+        Font.getFont( Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_MEDIUM );
+    
     private static final int TEXT_HEIGHT = FONT.getHeight() + 2;
     private static final int REDUCE_WIDTH = 0;  // 52
     private static final int REDUCE_HEIGHT = 0; // 75
@@ -59,6 +64,14 @@ final class MobileDrome
     
     private String mFinishedString = null;
     private boolean mFinished = false;
+    
+    private String mRemoveCountString = null;
+    private Timer mRemoveCountTimer = new Timer();
+    private TimerTask mRemoveCountTimerTask = null;
+    private static final int REMOVE_COUNT_SHOW_MIN = 5;
+    private static final int REMOVE_COUNT_TIMER_DELAY_MS = 1000;
+        
+    private final Object mSync = new Object();
 	
     public MobileDrome( final MobileMain pApplication )
     {
@@ -113,6 +126,7 @@ final class MobileDrome
     
     private final void reinit()
     {
+        mRemoveCountString = null;
         mFinishedString = null;
         mFinished = false;
         mMenu.setNextLevelEnabled( false );
@@ -199,6 +213,7 @@ final class MobileDrome
         mState.getPointer()
               .draw( pG );
         drawFinishedString( pG );
+        drawRemoveCountString( pG );
 
         pG.translate( -mDromeOffsetX, -mDromeOffsetY );
     }
@@ -269,34 +284,42 @@ final class MobileDrome
     {
         if ( mFinishedString != null )
         {
-            final int stringWidth = pG.getFont()
-                                      .stringWidth( mFinishedString );
-            final int border = 5;
-            final int bottomReduction = 2;
-            final int leftX = ( ( mDromeWidth - stringWidth ) / 2 ) - border;
-            final int topY = ( mDromeHeight / 2) - ( TEXT_HEIGHT / 2 ) - border;
-        
-            // Draw shadow
-            pG.setColor( Resources.COLOR_SHADOW );
-            pG.drawRect( leftX + 1,
-                         topY + 1,
-                         stringWidth + ( 2 * border ) - 2,
-                         TEXT_HEIGHT + ( 2 * border ) - 2 - bottomReduction );
-            
-            // Draw background box
-            pG.setColor( Resources.COLOR_BG_OTHER );
-            pG.fillRect( leftX,
-                         topY,
-                         stringWidth + ( 2 * border ) - 1,
-                         TEXT_HEIGHT + ( 2 * border ) - 1 - bottomReduction );
-            
-            // Draw message
-            drawString( pG,
-                        mFinishedString,
-                        leftX + border,
-                        topY + border,
-                        Graphics.TOP | Graphics.LEFT );
+            drawStringWithBox( pG,
+                               mFinishedString,
+                               mDromeOffsetX + ( mDromeWidth / 2 ),
+                               mDromeOffsetY + ( mDromeHeight / 2 ) );
         }
+    }
+    
+    private final synchronized void drawRemoveCountString( final Graphics pG )
+    {
+        if ( mRemoveCountString != null )
+        {
+            // Change to large font
+            final Font font = pG.getFont();
+            pG.setFont( FONT_BOLD_LARGE );
+
+            // Draw string
+            drawStringWithBox( pG,
+                               mRemoveCountString,
+                               mScreenWidth / 2,
+                                 mDromeOffsetY
+                               + mDromeHeight
+                               + ( ( mScreenHeight - mDromeHeight ) / 2 ) );
+            
+            // Change back to previous font
+            pG.setFont( font );
+        }
+    }
+    
+    private final void clearRemoveCountString()
+    {
+        synchronized ( mSync )
+        {
+            mRemoveCountString = null;
+            mRemoveCountTimerTask = null;
+        }
+        repaint();
     }
     
     private static final void drawString( final Graphics pG, final String pString,
@@ -310,6 +333,39 @@ final class MobileDrome
         pG.drawString( pString, pX, pY, pAnchor );
     }
             
+    private static final void drawStringWithBox( final Graphics pG,
+                                                 final String pString,
+                                                 final int pX, final int pY )
+    {
+        final Font font = pG.getFont();
+        final int stringWidth = font.stringWidth( pString );
+        final int stringHeight = font.getHeight();
+        final int border = 5;
+        final int bottomReduction = 2;
+        final int leftX = pX - ( stringWidth / 2 ) - border;
+        final int topY = pY - ( stringHeight / 2 ) - border;
+
+        // Draw shadow
+        pG.setColor( Resources.COLOR_SHADOW );
+        pG.drawRect( leftX + 1,
+                     topY + 1,
+                     stringWidth + ( 2 * border ) - 2,
+                     stringHeight + ( 2 * border ) - 2 - bottomReduction );
+
+        // Draw background box
+        pG.setColor( Resources.COLOR_BG_OTHER );
+        pG.fillRect( leftX,
+                     topY,
+                     stringWidth + ( 2 * border ) - 1,
+                     stringHeight + ( 2 * border ) - 1 - bottomReduction );
+
+        // Draw message
+        drawString( pG,
+                    pString,
+                    leftX + border,
+                    topY + border - 1,
+                    Graphics.TOP | Graphics.LEFT );
+    }
 
     private final void drawDudes( final Graphics pG )
     {
@@ -397,6 +453,35 @@ final class MobileDrome
                     {
                         dromeFinished = true;
                         dromeFinishSuccess = false;
+                    }
+
+                    // Update remove count string
+                    synchronized ( mSync )
+                    {
+                        // Cancel possibly pending timer
+                        if ( mRemoveCountTimerTask != null )
+                        {
+                            mRemoveCountTimerTask.cancel();
+                            mRemoveCountTimerTask = null;
+                        }
+                        
+                        if ( removeCount >= REMOVE_COUNT_SHOW_MIN )
+                        {
+                            mRemoveCountString = Integer.toString( removeCount );
+                            mRemoveCountTimerTask = new TimerTask()
+                                {
+                                    public final void run()
+                                    {
+                                        clearRemoveCountString();
+                                    }
+                                };
+                            mRemoveCountTimer.schedule( mRemoveCountTimerTask,
+                                                        REMOVE_COUNT_TIMER_DELAY_MS );
+                        }
+                        else
+                        {
+                            mRemoveCountString = null;
+                        }
                     }
                 }
                 updateCurrentCell = false;

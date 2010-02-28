@@ -3,12 +3,10 @@ package huippu.common;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-
-
 public final class Score
     implements IStorable
 {
-    private static final boolean mUseAllZero = true;
+    private static final boolean mUseAllZero = false;
     
     private final int mValue;
     private final int mLevel;
@@ -75,29 +73,29 @@ public final class Score
     
     private static final Score[] mScoresTotal = new Score[]
     {
+        new Score( 588, 6, new ScoreDate( 20,  2, 10 ) ),
         new Score( 512, 5, new ScoreDate( 20,  2, 10 ) ),
+        new Score( 431, 4, new ScoreDate( 22,  2, 10 ) ),
         new Score( 425, 4, new ScoreDate( 19,  2, 10 ) ),
         new Score( 418, 4, new ScoreDate(  9,  2, 10 ) ),
-        new Score( 400, 4, new ScoreDate( 12,  2, 10 ) ),
-        new Score( 390, 4, new ScoreDate( 19,  2, 10 ) ),
     };
     
     private static final Score[] mScoresLevel = new Score[]
     {
         new Score( 133, 1, new ScoreDate(  9,  2, 10 ) ),
+        new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
+        new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 125, 1, new ScoreDate( 10,  2, 10 ) ),
-        new Score( 124, 1, new ScoreDate( 19,  2, 10 ) ),
-        new Score( 124, 1, new ScoreDate( 10,  2, 10 ) ),
-        new Score( 121, 1, new ScoreDate( 13,  2, 10 ) ),
+        new Score( 124, 1, new ScoreDate( 22,  2, 10 ) ),
     };
     
     private static final Score[] mRemovesLevel = new Score[]
     {
         new Score(  7,  1, new ScoreDate(  9,  2, 10 ) ),
+        new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
+        new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
+        new Score( 10,  1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 10,  1, new ScoreDate( 19,  2, 10 ) ),
-        new Score( 10,  1, new ScoreDate( 10,  2, 10 ) ),
-        new Score( 11,  1, new ScoreDate( 13,  2, 10 ) ),
-        new Score( 12,  1, new ScoreDate( 19,  2, 10 ) ),
     };
     
     static final Score[] getInitialScoresTotal()
