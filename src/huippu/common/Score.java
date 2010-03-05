@@ -23,6 +23,13 @@ public final class Score
         mLevel = pLevel;
         mDate = pDate;
     }
+
+    public Score( final int pValue, final int pLevel )
+    {
+        mValue = pValue;
+        mLevel = pLevel;
+        mDate = new ScoreDate();
+    }
     
     public Score( final DataInputStream pInput )
         throws IOException

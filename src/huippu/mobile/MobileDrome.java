@@ -580,20 +580,17 @@ final class MobileDrome
     private final void updateTotalStats()
     {
         mHOF.addScoreTotal( new Score( mState.getScoreTotal(),
-                                       mState.getLevel(),
-                                       new ScoreDate( new Date() ) ) );
+                                       mState.getLevel() ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
     {
         mHOF.addScoreLevel( new Score( mState.getScoreLevel(),
-                                       mState.getLevel(),
-                                       new ScoreDate( new Date() ) ) );
+                                       mState.getLevel() ) );
         if ( pSuccess )
         {
             mHOF.addRemovesLevel( new Score( mState.getRemoveCountLevel(),
-                                             mState.getLevel(),
-                                             new ScoreDate( new Date() ) ) );
+                                             mState.getLevel() ) );
         }
     }
     

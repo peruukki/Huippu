@@ -14,7 +14,7 @@ public final class ScoreDate
     
     public ScoreDate()
     {
-        this( 0, 0, 0 );
+        this( new Date() );
     }
     
     public ScoreDate( final Date pDate )
