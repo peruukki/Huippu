@@ -105,6 +105,15 @@ public final class Score
         new Score( 10,  1, new ScoreDate( 19,  2, 10 ) ),
     };
     
+    private static final Score[] mRemovesBiggest = new Score[]
+    {
+        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+    };
+
     static final Score[] getInitialScoresTotal()
     {
         if ( mUseAllZero )
@@ -138,6 +147,18 @@ public final class Score
         else
         {
             return mRemovesLevel;
+        }
+    }
+    
+    static final Score[] getInitialRemovesBiggest()
+    {
+        if ( mUseAllZero )
+        {
+            return getEmptyScores( mRemovesBiggest.length );
+        }
+        else
+        {
+            return mRemovesBiggest;
         }
     }
     

@@ -8,11 +8,9 @@ import huippu.common.GameState;
 import huippu.common.Pointer;
 import huippu.common.Resources;
 import huippu.common.Score;
-import huippu.common.ScoreDate;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -443,6 +441,8 @@ final class MobileDrome
                     mState.incrementScoreLevel( increment );
                     mState.incrementScoreTotal( increment );
                     mState.incrementRemoveCountLevel();
+                    
+                    mHOF.addRemoveBiggest( new Score( removeCount, mState.getLevel() ) );
                     
                     if ( dudeGrid.allDudesRemoved() )
                     {

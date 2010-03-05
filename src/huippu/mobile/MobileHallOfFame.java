@@ -33,6 +33,7 @@ final class MobileHallOfFame extends HallOfFame
     private RecordStore mStoreScoresLevel;
     private RecordStore mStoreScoresTotal;
     private RecordStore mStoreRemovesLevel;
+    private RecordStore mStoreRemovesBiggest;
     
     public MobileHallOfFame( final MobileDrome pDrome, final Font pFont )
     {
@@ -73,12 +74,23 @@ final class MobileHallOfFame extends HallOfFame
         }
         return added;
     }
+
+    public final boolean addRemoveBiggest( final Score pScore )
+    {
+        final boolean added = super.addRemoveBiggest( pScore );
+        if ( added )
+        {
+            writeToStore( STORE_REMOVES_BIGGEST, mRemovesBiggest.getValues() );
+        }
+        return added;
+    }
     
     private final void readFromStore()
     {
         readScoresLevel();
         readScoresTotal();
         readRemovesLevel();
+        readRemovesBiggest();
     }
     
     private final void writeToStore()
@@ -86,6 +98,7 @@ final class MobileHallOfFame extends HallOfFame
         writeToStore( STORE_SCORES_LEVEL, mScoresLevel.getValues() );
         writeToStore( STORE_SCORES_TOTAL, mScoresTotal.getValues() );
         writeToStore( STORE_REMOVES_LEVEL, mRemovesLevel.getValues() );
+        writeToStore( STORE_REMOVES_BIGGEST, mRemovesBiggest.getValues() );
     }
     
     private static final boolean addRecordToStore( final RecordStore pStore,
@@ -201,6 +214,8 @@ final class MobileHallOfFame extends HallOfFame
     {
         addTitle( Resources.TITLE_REMOVES_LEVEL );
         addValues( mRemovesLevel.getValues() );
+        addTitle( Resources.TITLE_REMOVES_BIGGEST );
+        addValues( mRemovesBiggest.getValues() );
     }
     
     private final void addTitle( final String pTitle )
@@ -327,6 +342,35 @@ final class MobileHallOfFame extends HallOfFame
         
         MobileStorable.closeStore( mStoreRemovesLevel );
         mStoreRemovesLevel = null;
+    }
+    
+    private final void readRemovesBiggest()
+    {
+        mStoreRemovesBiggest =
+            MobileStorable.openStore( STORE_REMOVES_BIGGEST, true, false );
+        if ( mStoreRemovesBiggest != null )
+        {
+            try
+            {
+                if ( mStoreRemovesBiggest.getNumRecords () == 0 )
+                {
+                    initializeStore( mStoreRemovesBiggest, mRemovesBiggest.getValues() );
+                }
+                else
+                {
+                    mRemovesBiggest.setValues( readScores( mStoreRemovesBiggest,
+                                                           mRemovesBiggest.size() ) );
+                }
+            }        
+            catch ( final RecordStoreException e )
+            {
+                MobileMain.error(   "Failed to read from store "
+                                  + STORE_REMOVES_BIGGEST, e );
+            }
+        }
+        
+        MobileStorable.closeStore( mStoreRemovesBiggest );
+        mStoreRemovesBiggest = null;
     }
     
     private static final Score[] readScores( final RecordStore pStore,
