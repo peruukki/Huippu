@@ -107,11 +107,11 @@ public final class Score
     
     private static final Score[] mRemovesBiggest = new Score[]
     {
-        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
-        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
-        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
-        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
-        new Score(  0,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score( 26,  3, new ScoreDate(  8,  3, 10 ) ),
+        new Score( 24,  1, new ScoreDate(  8,  3, 10 ) ),
+        new Score( 21,  2, new ScoreDate(  9,  3, 10 ) ),
+        new Score( 21,  1, new ScoreDate(  5,  3, 10 ) ),
+        new Score( 19,  2, new ScoreDate(  8,  3, 10 ) ),
     };
 
     static final Score[] getInitialScoresTotal()

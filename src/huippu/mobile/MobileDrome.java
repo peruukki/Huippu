@@ -211,7 +211,6 @@ final class MobileDrome
         mState.getPointer()
               .draw( pG );
         drawFinishedString( pG );
-        drawRemoveCountString( pG );
 
         pG.translate( -mDromeOffsetX, -mDromeOffsetY );
     }
@@ -248,11 +247,12 @@ final class MobileDrome
                     Graphics.BOTTOM | Graphics.LEFT );
         
         // Display total score
-        drawString( pG,
-                    Resources.TEXT_SCORE_TOTAL + mState.getScoreTotal(),
-                    leftX,
-                    bottomY,
-                    Graphics.BOTTOM | Graphics.LEFT );
+        final int leftXRemoveCount = leftX
+            + drawString( pG,
+                          Resources.TEXT_SCORE_TOTAL + mState.getScoreTotal(),
+                          leftX,
+                          bottomY,
+                          Graphics.BOTTOM | Graphics.LEFT );
 
         
         // Display screen size
@@ -271,11 +271,16 @@ final class MobileDrome
                     Graphics.BOTTOM | Graphics.RIGHT );
         
         // Display remove count
-        drawString( pG,
-                    Resources.TEXT_REMOVES_LEVEL + mState.getRemoveCountLevel(),
-                    rightX,
-                    bottomY,
-                    Graphics.BOTTOM | Graphics.RIGHT );
+        final int rightXRemoveCount = rightX
+            - drawString( pG,
+                          Resources.TEXT_REMOVES_LEVEL + mState.getRemoveCountLevel(),
+                          rightX,
+                          bottomY,
+                          Graphics.BOTTOM | Graphics.RIGHT );
+        
+        drawRemoveCountString( pG,
+                                 leftXRemoveCount
+                               + ( ( rightXRemoveCount - leftXRemoveCount ) / 2 ) );
     }
     
     private final void drawFinishedString( final Graphics pG )
@@ -289,7 +294,8 @@ final class MobileDrome
         }
     }
     
-    private final synchronized void drawRemoveCountString( final Graphics pG )
+    private final synchronized void drawRemoveCountString( final Graphics pG,
+                                                           final int pX )
     {
         if ( mRemoveCountString != null )
         {
@@ -300,7 +306,7 @@ final class MobileDrome
             // Draw string
             drawStringWithBox( pG,
                                mRemoveCountString,
-                               mScreenWidth / 2,
+                               pX,
                                  mDromeOffsetY
                                + mDromeHeight
                                + ( ( mScreenHeight - mDromeHeight ) / 2 ) );
@@ -320,15 +326,18 @@ final class MobileDrome
         repaint();
     }
     
-    private static final void drawString( final Graphics pG, final String pString,
-                                          final int pX, final int pY,
-                                          final int pAnchor )
+    private static final int drawString( final Graphics pG, final String pString,
+                                         final int pX, final int pY,
+                                         final int pAnchor )
     {
         pG.setColor( Resources.COLOR_SHADOW );
         pG.drawString( pString, pX + 1, pY + 1, pAnchor );
         
         pG.setColor( Resources.COLOR_TEXT );
         pG.drawString( pString, pX, pY, pAnchor );
+        
+        return pG.getFont()
+                 .stringWidth( pString );
     }
             
     private static final void drawStringWithBox( final Graphics pG,
