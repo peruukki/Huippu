@@ -64,6 +64,7 @@ final class MobileDrome
     private boolean mFinished = false;
     
     private String mRemoveCountString = null;
+    private MobileTextBox mRemoveCountText = null;
     private Timer mRemoveCountTimer = new Timer();
     private TimerTask mRemoveCountTimerTask = null;
     private static final int REMOVE_COUNT_SHOW_MIN = 5;
@@ -203,16 +204,32 @@ final class MobileDrome
 
     protected void paint( final Graphics pG )
     {
-        pG.setFont( FONT );
-        drawScreen( pG );
-        pG.translate( mDromeOffsetX, mDromeOffsetY );
+        if ( redrawAll( pG ) )
+        {
+            pG.setFont( FONT );
+            drawScreen( pG );
+            pG.translate( mDromeOffsetX, mDromeOffsetY );
 
-        drawDudes( pG );
-        mState.getPointer()
-              .draw( pG );
-        drawFinishedString( pG );
+            drawDudes( pG );
+            mState.getPointer()
+            .draw( pG );
+            drawFinishedString( pG );
 
-        pG.translate( -mDromeOffsetX, -mDromeOffsetY );
+            pG.translate( -mDromeOffsetX, -mDromeOffsetY );
+        }
+        else
+        {
+            pG.setColor( Resources.COLOR_BG_OTHER );
+            pG.fillRect( pG.getClipX(),
+                         pG.getClipY(),
+                         pG.getClipWidth(),
+                         pG.getClipHeight() );
+        }
+    }
+    
+    private static final boolean redrawAll( final Graphics pG )
+    {
+        return ( pG.getClipX() == 0 );
     }
 
     private final void drawScreen( final Graphics pG )
@@ -301,15 +318,15 @@ final class MobileDrome
         {
             // Change to large font
             final Font font = pG.getFont();
-            pG.setFont( FONT_BOLD_LARGE );
-
-            // Draw string
-            drawStringWithBox( pG,
-                               mRemoveCountString,
-                               pX,
-                                 mDromeOffsetY
-                               + mDromeHeight
-                               + ( ( mScreenHeight - mDromeHeight ) / 2 ) );
+            
+            mRemoveCountText =
+                new MobileTextBox( mRemoveCountString,
+                                   pX,
+                                     mDromeOffsetY
+                                   + mDromeHeight
+                                   + ( ( mScreenHeight - mDromeHeight ) / 2 ),
+                                   FONT_BOLD_LARGE );
+            mRemoveCountText.draw( pG );
             
             // Change back to previous font
             pG.setFont( font );
@@ -322,8 +339,12 @@ final class MobileDrome
         {
             mRemoveCountString = null;
             mRemoveCountTimerTask = null;
+            repaint( mRemoveCountText.getLeftX(),
+                     mRemoveCountText.getTopY(),
+                     mRemoveCountText.getWidth() + 1,
+                     mRemoveCountText.getHeight() + 1 );
+            mRemoveCountText = null;
         }
-        repaint();
     }
     
     private static final int drawString( final Graphics pG, final String pString,
