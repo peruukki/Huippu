@@ -22,7 +22,7 @@ public final class Resources
     public static final String TEXT_NEW_GAME = "Uusi peli";
     public static final String TEXT_NEXT_LEVEL = "Seuraava taso";
     public static final String TEXT_EXIT = "Poistu";
-    public static final String TEXT_VIEW_HOF = "Huipputulokset";
+    public static final String TEXT_VIEW_HOF = "Tulosmuseo";
     public static final String TEXT_RETURN = "Edell.";
     public static final String TEXT_RESET_HOF = "Nollaa";
     public static final String TEXT_RESET_HOF_CONFIRM =
@@ -31,9 +31,10 @@ public final class Resources
     public static final String TEXT_NO = "Ei";
     
     // Title texts
-    public static final String TITLE_HOF = "Huipputulokset";
+    public static final String TITLE_HOF = "Tulosmuseo";
     public static final String TITLE_SCORES_TOTAL = "Pisteet yhteensä:";
-    public static final String TITLE_SCORES_LEVEL = "Tason pisteet:";
+    public static final String TITLE_SCORES_LEVEL_BIGGEST = "Suurimmat tasopisteet:";
+    public static final String TITLE_SCORES_LEVEL_SMALLEST = "Pienimmät tasopisteet:";
     public static final String TITLE_REMOVES_AVG = "Poistojen keskiarvo:";
     public static final String TITLE_REMOVES_LEVEL_SMALLEST = "Vähiten tason poistoja:";
     public static final String TITLE_REMOVES_LEVEL_BIGGEST = "Eniten tason poistoja:";
