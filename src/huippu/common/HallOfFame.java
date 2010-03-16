@@ -4,15 +4,18 @@ public abstract class HallOfFame
 {
     protected static final String STORE_SCORES_LEVEL = "ScoresLevel";
     protected static final String STORE_SCORES_TOTAL = "ScoresTotal";
-    protected static final String STORE_REMOVES_LEVEL = "RemovesLevel";
+    protected static final String STORE_REMOVES_LEVEL_SMALLEST = "RemovesLevelSmallest";
+    protected static final String STORE_REMOVES_LEVEL_BIGGEST = "RemovesLevelBiggest";
     protected static final String STORE_REMOVES_BIGGEST = "RemovesBiggest";
     
     protected StoreIntDescending mScoresLevel =
         new StoreIntDescending( Score.getInitialScoresLevel() );
     protected StoreIntDescending mScoresTotal =
         new StoreIntDescending( Score.getInitialScoresTotal() );
-    protected StoreIntAscending mRemovesLevel =
-        new StoreIntAscending( Score.getInitialRemovesLevel() );
+    protected StoreIntAscending mRemovesLevelSmallest =
+        new StoreIntAscending( Score.getInitialRemovesLevelSmallest() );
+    protected StoreIntDescending mRemovesLevelBiggest =
+        new StoreIntDescending( Score.getInitialRemovesLevelBiggest() );
     protected StoreIntDescending mRemovesBiggest =
         new StoreIntDescending( Score.getInitialRemovesBiggest() );
     
@@ -26,9 +29,14 @@ public abstract class HallOfFame
         return mScoresTotal.addValue( pScore );
     }
     
-    public boolean addRemovesLevel( final Score pScore )
+    public boolean addRemovesLevelSmallest( final Score pScore )
     {
-        return mRemovesLevel.addValue( pScore );
+        return mRemovesLevelSmallest.addValue( pScore );
+    }
+    
+    public boolean addRemovesLevelBiggest( final Score pScore )
+    {
+        return mRemovesLevelBiggest.addValue( pScore );
     }
     
     public boolean addRemoveBiggest( final Score pScore )
@@ -46,9 +54,14 @@ public abstract class HallOfFame
         return mScoresTotal.getValues();
     }
     
-    public final Score[] getRemovesLevel()
+    public final Score[] getRemovesLevelSmallest()
     {
-        return mRemovesLevel.getValues();
+        return mRemovesLevelSmallest.getValues();
+    }
+    
+    public final Score[] getRemovesLevelBiggest()
+    {
+        return mRemovesLevelBiggest.getValues();
     }
     
     public final Score[] getRemovesBiggest()
@@ -60,7 +73,8 @@ public abstract class HallOfFame
     {
         mScoresLevel.clear();
         mScoresTotal.clear();
-        mRemovesLevel.clear();
+        mRemovesLevelSmallest.clear();
+        mRemovesLevelBiggest.clear();
         mRemovesBiggest.clear();
     }
     

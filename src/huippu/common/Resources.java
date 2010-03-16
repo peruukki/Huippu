@@ -35,7 +35,8 @@ public final class Resources
     public static final String TITLE_SCORES_TOTAL = "Pisteet yhteensä:";
     public static final String TITLE_SCORES_LEVEL = "Tason pisteet:";
     public static final String TITLE_REMOVES_AVG = "Poistojen keskiarvo:";
-    public static final String TITLE_REMOVES_LEVEL = "Tason poistot:";
+    public static final String TITLE_REMOVES_LEVEL_SMALLEST = "Vähiten tason poistoja:";
+    public static final String TITLE_REMOVES_LEVEL_BIGGEST = "Eniten tason poistoja:";
     public static final String TITLE_REMOVES_BIGGEST = "Suurimmat poistot:";
     public static final String TITLE_CONFIRM = "Vahvistus";
     

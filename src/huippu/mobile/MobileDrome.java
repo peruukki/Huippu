@@ -615,12 +615,13 @@ final class MobileDrome
 
     private final void updateLevelStats( final boolean pSuccess )
     {
-        mHOF.addScoreLevel( new Score( mState.getScoreLevel(),
-                                       mState.getLevel() ) );
+        final int level = mState.getLevel();
+        mHOF.addScoreLevel( new Score( mState.getScoreLevel(), level ) );
         if ( pSuccess )
         {
-            mHOF.addRemovesLevel( new Score( mState.getRemoveCountLevel(),
-                                             mState.getLevel() ) );
+            final int removeCount = mState.getRemoveCountLevel();
+            mHOF.addRemovesLevelSmallest( new Score( removeCount, level ) );
+            mHOF.addRemovesLevelBiggest( new Score( removeCount, level ) );
         }
     }
     
