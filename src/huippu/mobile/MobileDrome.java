@@ -545,10 +545,6 @@ final class MobileDrome
         if ( !mFinished )
         {
             mFinished = true;
-            if ( !pInitialState )
-            {
-                updateLevelStats( pSuccess );
-            }
             
             if ( pSuccess )
             {
@@ -558,14 +554,18 @@ final class MobileDrome
             else
             {
                 mFinishedString = Resources.TEXT_FINISHED_FAIL;
-                if ( !pInitialState )
-                {
-                    updateTotalStats();
-                }
             }
             
             if ( !pInitialState )
             {
+                if ( pSuccess )
+                {
+                    updateLevelStats( pSuccess );
+                }
+                else
+                {
+                    updateTotalStats();
+                }
                 repaint();
             }
         }
