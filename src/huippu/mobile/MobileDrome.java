@@ -472,7 +472,7 @@ final class MobileDrome
                     mState.incrementScoreTotal( increment );
                     mState.incrementRemoveCountLevel();
                     
-                    mHOF.addRemoveBiggest( new Score( removeCount, mState.getLevel() ) );
+                    mHOF.addRemove( new Score( removeCount, mState.getLevel() ) );
                     
                     if ( dudeGrid.allDudesRemoved() )
                     {
@@ -609,24 +609,16 @@ final class MobileDrome
     
     private final void updateTotalStats()
     {
-        final int score = mState.getScoreTotal();
-        final int level = mState.getLevel();
-        mHOF.addScoreTotalBiggest( new Score( score, level ) );
-        mHOF.addScoreTotalSmallest( new Score( score, level ) );
+        mHOF.addScoreTotal( new Score( mState.getScoreTotal(), mState.getLevel() ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )
     {
         final int level = mState.getLevel();
-        final Score scoreLevel = new Score( mState.getScoreLevel(), level );
-        mHOF.addScoreLevelBiggest( scoreLevel );
-        mHOF.addScoreLevelSmallest( scoreLevel );
-        
+        mHOF.addScoreLevel( new Score( mState.getScoreLevel(), level ) );
         if ( pSuccess )
         {
-            final Score removeCount = new Score( mState.getRemoveCountLevel(), level );
-            mHOF.addRemovesLevelSmallest( removeCount );
-            mHOF.addRemovesLevelBiggest( removeCount );
+            mHOF.addRemovesLevel( new Score( mState.getRemoveCountLevel(), level ) );
         }
     }
     

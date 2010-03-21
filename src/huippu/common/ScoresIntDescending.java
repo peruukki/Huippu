@@ -1,9 +1,9 @@
 package huippu.common;
 
-public final class StoreIntDescending
-    extends StoreInt
+public final class ScoresIntDescending
+    extends ScoresInt
 {
-    public StoreIntDescending( final Score[] pInitialValues )
+    public ScoresIntDescending( final Score[] pInitialValues )
     {
         super( pInitialValues );
     }

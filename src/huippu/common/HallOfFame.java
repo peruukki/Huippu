@@ -10,20 +10,20 @@ public abstract class HallOfFame
     protected static final String STORE_REMOVES_LEVEL_BIGGEST = "RemovesLevelBiggest";
     protected static final String STORE_REMOVES_BIGGEST = "RemovesBiggest";
     
-    protected StoreIntDescending mScoresTotalBiggest =
-        new StoreIntDescending( Score.getInitialScoresTotalBiggest() );
-    protected StoreIntAscending mScoresTotalSmallest =
-        new StoreIntAscending( Score.getInitialScoresTotalSmallest() );
-    protected StoreIntDescending mScoresLevelBiggest =
-        new StoreIntDescending( Score.getInitialScoresLevelBiggest() );
-    protected StoreIntAscending mScoresLevelSmallest =
-        new StoreIntAscending( Score.getInitialScoresLevelSmallest() );
-    protected StoreIntAscending mRemovesLevelSmallest =
-        new StoreIntAscending( Score.getInitialRemovesLevelSmallest() );
-    protected StoreIntDescending mRemovesLevelBiggest =
-        new StoreIntDescending( Score.getInitialRemovesLevelBiggest() );
-    protected StoreIntDescending mRemovesBiggest =
-        new StoreIntDescending( Score.getInitialRemovesBiggest() );
+    protected ScoresIntDescending mScoresTotalBiggest =
+        new ScoresIntDescending( Score.getInitialScoresTotalBiggest() );
+    protected ScoresIntAscending mScoresTotalSmallest =
+        new ScoresIntAscending( Score.getInitialScoresTotalSmallest() );
+    protected ScoresIntDescending mScoresLevelBiggest =
+        new ScoresIntDescending( Score.getInitialScoresLevelBiggest() );
+    protected ScoresIntAscending mScoresLevelSmallest =
+        new ScoresIntAscending( Score.getInitialScoresLevelSmallest() );
+    protected ScoresIntAscending mRemovesLevelSmallest =
+        new ScoresIntAscending( Score.getInitialRemovesLevelSmallest() );
+    protected ScoresIntDescending mRemovesLevelBiggest =
+        new ScoresIntDescending( Score.getInitialRemovesLevelBiggest() );
+    protected ScoresIntDescending mRemovesBiggest =
+        new ScoresIntDescending( Score.getInitialRemovesBiggest() );
     
     public boolean addScoreTotalBiggest( final Score pScore )
     {

@@ -1,10 +1,10 @@
 package huippu.common;
 
-public abstract class StoreInt
+public abstract class ScoresInt
 {
     final protected Score[] mValues;
     
-    public StoreInt( final Score[] pInitialValues )
+    public ScoresInt( final Score[] pInitialValues )
     {
         mValues = pInitialValues;
     }

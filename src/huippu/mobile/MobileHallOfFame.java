@@ -3,6 +3,7 @@ package huippu.mobile;
 import huippu.common.HallOfFame;
 import huippu.common.Resources;
 import huippu.common.Score;
+import huippu.common.ScoresInt;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -30,14 +31,6 @@ final class MobileHallOfFame extends HallOfFame
     private final int mLevelWidth;
     private Form mForm;
     
-    private RecordStore mStoreScoresTotalBiggest;
-    private RecordStore mStoreScoresTotalSmallest;
-    private RecordStore mStoreScoresLevelBiggest;
-    private RecordStore mStoreScoresLevelSmallest;
-    private RecordStore mStoreRemovesLevelSmallest;
-    private RecordStore mStoreRemovesLevelBiggest;
-    private RecordStore mStoreRemovesBiggest;
-    
     public MobileHallOfFame( final MobileDrome pDrome, final Font pFont )
     {
         super();
@@ -48,85 +41,59 @@ final class MobileHallOfFame extends HallOfFame
         readFromStore();
     }
     
-    public final boolean addScoreTotalBiggest( final Score pScore )
+    public final void addScoreTotal( final Score pScore )
     {
-        final boolean added = super.addScoreTotalBiggest( pScore );
-        if ( added )
+        if ( super.addScoreTotalBiggest( pScore ) )
         {
             writeToStore( STORE_SCORES_TOTAL_BIGGEST, mScoresTotalBiggest.getValues() );
         }
-        return added;
-    }
-    
-    public final boolean addScoreTotalSmallest( final Score pScore )
-    {
-        final boolean added = super.addScoreTotalSmallest( pScore );
-        if ( added )
+        if ( super.addScoreTotalSmallest( pScore ) )
         {
             writeToStore( STORE_SCORES_TOTAL_SMALLEST, mScoresTotalSmallest.getValues() );
         }
-        return added;
     }
     
-    public final boolean addScoreLevelBiggest( final Score pScore )
+    public final void addScoreLevel( final Score pScore )
     {
-        final boolean added = super.addScoreLevelBiggest( pScore );
-        if ( added )
+        if ( super.addScoreLevelBiggest( pScore ) )
         {
             writeToStore( STORE_SCORES_LEVEL_BIGGEST, mScoresLevelBiggest.getValues() );
         }
-        return added;
-    }
-    
-    public final boolean addScoreLevelSmallest( final Score pScore )
-    {
-        final boolean added = super.addScoreLevelSmallest( pScore );
-        if ( added )
+        if ( super.addScoreLevelSmallest( pScore ) )
         {
             writeToStore( STORE_SCORES_LEVEL_SMALLEST, mScoresLevelSmallest.getValues() );
         }
-        return added;
     }
     
-    public final boolean addRemovesLevelSmallest( final Score pScore )
+    public final void addRemovesLevel( final Score pScore )
     {
-        final boolean added = super.addRemovesLevelSmallest( pScore );
-        if ( added )
+        if ( super.addRemovesLevelSmallest( pScore ) )
         {
             writeToStore( STORE_REMOVES_LEVEL_SMALLEST, mRemovesLevelSmallest.getValues() );
         }
-        return added;
-    }
-    
-    public final boolean addRemovesLevelBiggest( final Score pScore )
-    {
-        final boolean added = super.addRemovesLevelBiggest( pScore );
-        if ( added )
+        if ( super.addRemovesLevelBiggest( pScore ) )
         {
             writeToStore( STORE_REMOVES_LEVEL_BIGGEST, mRemovesLevelBiggest.getValues() );
         }
-        return added;
     }
 
-    public final boolean addRemoveBiggest( final Score pScore )
+    public final void addRemove( final Score pScore )
     {
-        final boolean added = super.addRemoveBiggest( pScore );
-        if ( added )
+        if ( super.addRemoveBiggest( pScore ) )
         {
             writeToStore( STORE_REMOVES_BIGGEST, mRemovesBiggest.getValues() );
         }
-        return added;
     }
     
     private final void readFromStore()
     {
-        readScoresTotalBiggest();
-        readScoresTotalSmallest();
-        readScoresLevelBiggest();
-        readScoresLevelSmallest();
-        readRemovesLevelSmallest();
-        readRemovesLevelBiggest();
-        readRemovesBiggest();
+        readScores( STORE_SCORES_TOTAL_BIGGEST, mScoresTotalBiggest );
+        readScores( STORE_SCORES_TOTAL_SMALLEST, mScoresTotalSmallest );
+        readScores( STORE_SCORES_LEVEL_BIGGEST, mScoresLevelBiggest );
+        readScores( STORE_SCORES_LEVEL_SMALLEST, mScoresLevelSmallest );
+        readScores( STORE_REMOVES_LEVEL_SMALLEST, mRemovesLevelSmallest );
+        readScores( STORE_REMOVES_LEVEL_BIGGEST, mRemovesLevelBiggest );
+        readScores( STORE_REMOVES_BIGGEST, mRemovesBiggest );
     }
     
     private final void writeToStore()
@@ -302,219 +269,31 @@ final class MobileHallOfFame extends HallOfFame
         }
     }
     
-    private final void readScoresTotalBiggest()
+    private static final void readScores( final String pStoreName,
+                                          final ScoresInt pScores )
     {
-        mStoreScoresTotalBiggest =
-            MobileStorable.openStore( STORE_SCORES_TOTAL_BIGGEST, true, false );
-        if ( mStoreScoresTotalBiggest != null )
+        final RecordStore store = MobileStorable.openStore( pStoreName, true, false );
+        if ( store != null )
         {
             try
             {
-                if ( mStoreScoresTotalBiggest.getNumRecords () == 0 )
+                if ( store.getNumRecords () == 0 )
                 {
-                    initializeStore( mStoreScoresTotalBiggest,
-                                     mScoresTotalBiggest.getValues() );
+                    initializeStore( store, pScores.getValues() );
                 }
                 else
                 {
-                    mScoresTotalBiggest.setValues(
-                        readScores( mStoreScoresTotalBiggest,
-                                    mScoresTotalBiggest.size() ) );
+                    pScores.setValues( readScores( store, pScores.size() ) );
                 }
             }        
             catch ( final RecordStoreException e )
             {
                 MobileMain.error(   "Failed to read from store "
-                                  + STORE_SCORES_TOTAL_BIGGEST, e );
+                                  + pStoreName, e );
             }
         }
         
-        MobileStorable.closeStore( mStoreScoresTotalBiggest );
-        mStoreScoresTotalBiggest = null;
-    }
-    
-    private final void readScoresTotalSmallest()
-    {
-        mStoreScoresTotalSmallest =
-            MobileStorable.openStore( STORE_SCORES_TOTAL_SMALLEST, true, false );
-        if ( mStoreScoresTotalSmallest != null )
-        {
-            try
-            {
-                if ( mStoreScoresTotalSmallest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreScoresTotalSmallest,
-                                     mScoresTotalSmallest.getValues() );
-                }
-                else
-                {
-                    mScoresTotalSmallest.setValues(
-                        readScores( mStoreScoresTotalSmallest,
-                                    mScoresTotalSmallest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_SCORES_TOTAL_SMALLEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreScoresTotalSmallest );
-        mStoreScoresTotalSmallest = null;
-    }
-    
-    private final void readScoresLevelBiggest()
-    {
-        mStoreScoresLevelBiggest =
-            MobileStorable.openStore( STORE_SCORES_LEVEL_BIGGEST, true, false );
-        if ( mStoreScoresLevelBiggest != null )
-        {
-            try
-            {
-                if ( mStoreScoresLevelBiggest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreScoresLevelBiggest,
-                                     mScoresLevelBiggest.getValues() );
-                }
-                else
-                {
-                    mScoresLevelBiggest.setValues(
-                        readScores( mStoreScoresLevelBiggest,
-                                    mScoresLevelBiggest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_SCORES_LEVEL_BIGGEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreScoresLevelBiggest );
-        mStoreScoresLevelBiggest = null;
-    }
-    
-    private final void readScoresLevelSmallest()
-    {
-        mStoreScoresLevelSmallest =
-            MobileStorable.openStore( STORE_SCORES_LEVEL_SMALLEST, true, false );
-        if ( mStoreScoresLevelSmallest != null )
-        {
-            try
-            {
-                if ( mStoreScoresLevelSmallest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreScoresLevelSmallest,
-                                     mScoresLevelSmallest.getValues() );
-                }
-                else
-                {
-                    mScoresLevelSmallest.setValues(
-                        readScores( mStoreScoresLevelSmallest,
-                                    mScoresLevelSmallest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_SCORES_LEVEL_SMALLEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreScoresLevelSmallest );
-        mStoreScoresLevelSmallest = null;
-    }
-    
-    private final void readRemovesLevelSmallest()
-    {
-        mStoreRemovesLevelSmallest =
-            MobileStorable.openStore( STORE_REMOVES_LEVEL_SMALLEST, true, false );
-        if ( mStoreRemovesLevelSmallest != null )
-        {
-            try
-            {
-                if ( mStoreRemovesLevelSmallest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreRemovesLevelSmallest,
-                                     mRemovesLevelSmallest.getValues() );
-                }
-                else
-                {
-                    mRemovesLevelSmallest.setValues(
-                        readScores( mStoreRemovesLevelSmallest,
-                                    mRemovesLevelSmallest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_REMOVES_LEVEL_SMALLEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreRemovesLevelSmallest );
-        mStoreRemovesLevelSmallest = null;
-    }
-    
-    private final void readRemovesLevelBiggest()
-    {
-        mStoreRemovesLevelBiggest =
-            MobileStorable.openStore( STORE_REMOVES_LEVEL_BIGGEST, true, false );
-        if ( mStoreRemovesLevelBiggest != null )
-        {
-            try
-            {
-                if ( mStoreRemovesLevelBiggest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreRemovesLevelBiggest,
-                                     mRemovesLevelBiggest.getValues() );
-                }
-                else
-                {
-                    mRemovesLevelBiggest.setValues(
-                        readScores( mStoreRemovesLevelBiggest,
-                                    mRemovesLevelBiggest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_REMOVES_LEVEL_BIGGEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreRemovesLevelBiggest );
-        mStoreRemovesLevelBiggest = null;
-    }
-    
-    private final void readRemovesBiggest()
-    {
-        mStoreRemovesBiggest =
-            MobileStorable.openStore( STORE_REMOVES_BIGGEST, true, false );
-        if ( mStoreRemovesBiggest != null )
-        {
-            try
-            {
-                if ( mStoreRemovesBiggest.getNumRecords () == 0 )
-                {
-                    initializeStore( mStoreRemovesBiggest, mRemovesBiggest.getValues() );
-                }
-                else
-                {
-                    mRemovesBiggest.setValues( readScores( mStoreRemovesBiggest,
-                                                           mRemovesBiggest.size() ) );
-                }
-            }        
-            catch ( final RecordStoreException e )
-            {
-                MobileMain.error(   "Failed to read from store "
-                                  + STORE_REMOVES_BIGGEST, e );
-            }
-        }
-        
-        MobileStorable.closeStore( mStoreRemovesBiggest );
-        mStoreRemovesBiggest = null;
+        MobileStorable.closeStore( store );
     }
     
     private static final Score[] readScores( final RecordStore pStore,
