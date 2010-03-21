@@ -32,7 +32,8 @@ public final class Resources
     
     // Title texts
     public static final String TITLE_HOF = "Tulosmuseo";
-    public static final String TITLE_SCORES_TOTAL = "Pisteet yhteensä:";
+    public static final String TITLE_SCORES_TOTAL_BIGGEST = "Suurimmat pisteet:";
+    public static final String TITLE_SCORES_TOTAL_SMALLEST = "Pienimmät pisteet:";
     public static final String TITLE_SCORES_LEVEL_BIGGEST = "Suurimmat tasopisteet:";
     public static final String TITLE_SCORES_LEVEL_SMALLEST = "Pienimmät tasopisteet:";
     public static final String TITLE_REMOVES_AVG = "Poistojen keskiarvo:";

@@ -78,13 +78,22 @@ public final class Score
         return mDate;
     }
     
-    private static final Score[] mScoresTotal = new Score[]
+    private static final Score[] mScoresTotalBiggest = new Score[]
     {
         new Score( 714, 7, new ScoreDate( 20,  3, 10 ) ),
         new Score( 588, 6, new ScoreDate( 20,  2, 10 ) ),
         new Score( 512, 5, new ScoreDate( 20,  2, 10 ) ),
         new Score( 507, 5, new ScoreDate( 12,  3, 10 ) ),
         new Score( 441, 4, new ScoreDate( 18,  3, 10 ) ),
+    };
+    
+    private static final Score[] mScoresTotalSmallest = new Score[]
+    {
+        new Score(   0, 1, new ScoreDate( 20,  3, 10 ) ),
+        new Score(   0, 1, new ScoreDate( 20,  2, 10 ) ),
+        new Score(   0, 1, new ScoreDate( 20,  2, 10 ) ),
+        new Score(   0, 1, new ScoreDate( 12,  3, 10 ) ),
+        new Score(   0, 1, new ScoreDate( 18,  3, 10 ) ),
     };
     
     private static final Score[] mScoresLevelBiggest = new Score[]
@@ -132,15 +141,27 @@ public final class Score
         new Score( 24,  2, new ScoreDate(  9,  3, 10 ) ),
     };
 
-    static final Score[] getInitialScoresTotal()
+    static final Score[] getInitialScoresTotalBiggest()
     {
         if ( mUseAllZero )
         {
-            return getEmptyScores( mScoresTotal.length );
+            return getEmptyScores( mScoresTotalBiggest.length );
         }
         else
         {
-            return mScoresTotal;
+            return mScoresTotalBiggest;
+        }
+    }
+
+    static final Score[] getInitialScoresTotalSmallest()
+    {
+        if ( mUseAllZero )
+        {
+            return getEmptyScores( mScoresTotalSmallest.length );
+        }
+        else
+        {
+            return mScoresTotalSmallest;
         }
     }
     

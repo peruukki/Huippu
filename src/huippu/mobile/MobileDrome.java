@@ -609,8 +609,10 @@ final class MobileDrome
     
     private final void updateTotalStats()
     {
-        mHOF.addScoreTotal( new Score( mState.getScoreTotal(),
-                                       mState.getLevel() ) );
+        final int score = mState.getScoreTotal();
+        final int level = mState.getLevel();
+        mHOF.addScoreTotalBiggest( new Score( score, level ) );
+        mHOF.addScoreTotalSmallest( new Score( score, level ) );
     }
 
     private final void updateLevelStats( final boolean pSuccess )

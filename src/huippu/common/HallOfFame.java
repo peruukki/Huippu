@@ -2,15 +2,18 @@ package huippu.common;
 
 public abstract class HallOfFame
 {
-    protected static final String STORE_SCORES_TOTAL = "ScoresTotal";
+    protected static final String STORE_SCORES_TOTAL_BIGGEST = "ScoresTotalBiggest";
+    protected static final String STORE_SCORES_TOTAL_SMALLEST = "ScoresTotalSmallest";
     protected static final String STORE_SCORES_LEVEL_BIGGEST = "ScoresLevelBiggest";
     protected static final String STORE_SCORES_LEVEL_SMALLEST = "ScoresLevelSmallest";
     protected static final String STORE_REMOVES_LEVEL_SMALLEST = "RemovesLevelSmallest";
     protected static final String STORE_REMOVES_LEVEL_BIGGEST = "RemovesLevelBiggest";
     protected static final String STORE_REMOVES_BIGGEST = "RemovesBiggest";
     
-    protected StoreIntDescending mScoresTotal =
-        new StoreIntDescending( Score.getInitialScoresTotal() );
+    protected StoreIntDescending mScoresTotalBiggest =
+        new StoreIntDescending( Score.getInitialScoresTotalBiggest() );
+    protected StoreIntAscending mScoresTotalSmallest =
+        new StoreIntAscending( Score.getInitialScoresTotalSmallest() );
     protected StoreIntDescending mScoresLevelBiggest =
         new StoreIntDescending( Score.getInitialScoresLevelBiggest() );
     protected StoreIntAscending mScoresLevelSmallest =
@@ -22,9 +25,14 @@ public abstract class HallOfFame
     protected StoreIntDescending mRemovesBiggest =
         new StoreIntDescending( Score.getInitialRemovesBiggest() );
     
-    public boolean addScoreTotal( final Score pScore )
+    public boolean addScoreTotalBiggest( final Score pScore )
     {
-        return mScoresTotal.addValue( pScore );
+        return mScoresTotalBiggest.addValue( pScore );
+    }
+    
+    public boolean addScoreTotalSmallest( final Score pScore )
+    {
+        return mScoresTotalSmallest.addValue( pScore );
     }
     
     public boolean addScoreLevelBiggest( final Score pScore )
@@ -52,9 +60,14 @@ public abstract class HallOfFame
         return mRemovesBiggest.addValue( pScore );
     }
     
-    public final Score[] getScoresTotal()
+    public final Score[] getScoresTotalBiggest()
     {
-        return mScoresTotal.getValues();
+        return mScoresTotalBiggest.getValues();
+    }
+    
+    public final Score[] getScoresTotalSmallest()
+    {
+        return mScoresTotalSmallest.getValues();
     }
     
     public final Score[] getScoresLevelBiggest()
@@ -84,7 +97,8 @@ public abstract class HallOfFame
     
     public void clearAll()
     {
-        mScoresTotal.clear();
+        mScoresTotalBiggest.clear();
+        mScoresTotalSmallest.clear();
         mScoresLevelBiggest.clear();
         mScoresLevelSmallest.clear();
         mRemovesLevelSmallest.clear();
