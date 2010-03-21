@@ -30,27 +30,15 @@ public final class MobileMain
     }
 
     protected final void destroyApp( final boolean arg0 )
-//		throws MIDletStateChangeException
     {
-    //        theGame.destroyGame();
+        mDrome.gameExiting();
         Display.getDisplay( this )
                .setCurrent( null );
     }
 
     protected final void pauseApp()
     {
-        // Stop game's timing thread
-//        theGame.destroyGame();
-
-        try
-        {
-            // Start another thread after this one finishes
-            mThread.join();
-        }
-        catch ( final InterruptedException e )
-        {
-            // Ignored
-        }
+        // TODO
     }
 
     protected final void startApp()
@@ -63,19 +51,12 @@ public final class MobileMain
         {
             // Start the game in its own thread
             mThread = new Thread( mDrome );
-        	
-            // Ensure the game thread will work after pause
-//            theGame.setDestroyed( false );
             mThread.start();
         }
         catch ( final Error e )
         {
             exitApplication();
         }
-//        if ( !theGame.isStarted() )
-//        {
-//            theGame.restart();
-//        }
     }
     
     final void exitApplication()

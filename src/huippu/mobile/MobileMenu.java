@@ -64,7 +64,6 @@ final class MobileMenu
         }
         else if ( pC == mCmdExit )
         {
-            mDrome.gameExiting();
             mApplication.exitApplication();
         }
     }
