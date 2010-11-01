@@ -12,8 +12,7 @@ final class MobileDude2 extends MobileDude
 
     public MobileDude2( final int pId )
     {
-        super( pId );
-        mColorDraw = COLOR_DRAW;
+        super( pId, COLOR_DRAW );
     }
 
     public final void updateScreenPosition()
@@ -62,7 +61,7 @@ final class MobileDude2 extends MobileDude
     }
 
     protected final void draw( final Graphics pG, final int pOffsetX,
-                               final int pOffsetY )
+                               final int pOffsetY, final boolean pRemovable )
     {
         // Upper triangle
         pG.fillTriangle( mCenterX + pOffsetX,
@@ -79,5 +78,31 @@ final class MobileDude2 extends MobileDude
                          mLowerTriangleTopY + pOffsetY,
                          mRightX + pOffsetX,
                          mLowerTriangleTopY + pOffsetY );
+        
+        // Top left corner
+        pG.setColor( pRemovable ? mColorDrawDarker : mColorDrawLighter );
+        pG.drawLine( mCenterX + pOffsetX,
+                     mTopY + pOffsetY,
+                     mLeftX + pOffsetX,
+                     mUpperTriangleBottomY + pOffsetY );
+        
+        // Top right corner
+        pG.drawLine( mCenterX + pOffsetX,
+                     mTopY + pOffsetY,
+                     mRightX + pOffsetX,
+                     mUpperTriangleBottomY + pOffsetY );
+
+        // Bottom left corner
+        pG.drawLine( mCenterX + pOffsetX,
+                     mBottomY - 1 + pOffsetY,
+                     mLeftX + pOffsetX,
+                     mLowerTriangleTopY + 1 + pOffsetY );
+        
+        // Bottom right corner
+        pG.setColor( pRemovable ? mColorDrawLighter : mColorDrawDarker );
+        pG.drawLine( mCenterX + pOffsetX,
+                     mBottomY - 1 + pOffsetY,
+                     mRightX + pOffsetX,
+                     mLowerTriangleTopY + 1 + pOffsetY );
     }
 }

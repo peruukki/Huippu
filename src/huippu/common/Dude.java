@@ -5,7 +5,7 @@ public abstract class Dude
 {
     public static final int INVALID_ID = -1;
     
-    private static final int DEFAULT_OFFSET = 1;
+    private static final int DEFAULT_OFFSET = 0;
     protected static int mOffsetX = DEFAULT_OFFSET;
     protected static int mOffsetY = DEFAULT_OFFSET;
     
