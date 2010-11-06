@@ -4,11 +4,9 @@ import javax.microedition.lcdui.Graphics;
 
 final class MobileDude3 extends MobileDude
 {
-    static final int COLOR_DRAW = 0x002020CC;
-
-    public MobileDude3( final int pId )
+    public MobileDude3( final int pId, final int pColorDraw )
     {
-        super( pId, COLOR_DRAW );
+        super( pId, pColorDraw );
     }
 
     protected final void draw( final Graphics pG, final int pOffsetX,

@@ -4,15 +4,13 @@ import javax.microedition.lcdui.Graphics;
 
 final class MobileDude2 extends MobileDude
 {
-    static final int COLOR_DRAW = 0x0020AA40;
-    
     private int mCenterX = 0;
     private int mUpperTriangleBottomY = 0;
     private int mLowerTriangleTopY = 0;
 
-    public MobileDude2( final int pId )
+    public MobileDude2( final int pId, final int pColorDraw )
     {
-        super( pId, COLOR_DRAW );
+        super( pId, pColorDraw );
     }
 
     public final void updateScreenPosition()

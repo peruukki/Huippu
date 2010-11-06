@@ -212,7 +212,7 @@ final class MobileDrome
 
             drawDudes( pG );
             mState.getPointer()
-            .draw( pG );
+                  .draw( pG );
             drawFinishedString( pG );
 
             pG.translate( -mDromeOffsetX, -mDromeOffsetY );

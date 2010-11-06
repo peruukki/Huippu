@@ -1,5 +1,7 @@
 package huippu.mobile;
 
+import java.util.Random;
+
 import huippu.common.Dude;
 
 import javax.microedition.lcdui.Graphics;
@@ -7,6 +9,9 @@ import javax.microedition.lcdui.Graphics;
 abstract class MobileDude extends Dude
 {
     public static final int DUDE_COUNT = 3;
+    
+    private static final int COLOR_DRAW[] =
+        { 0x00CC2020, 0x0020AA40, 0x002020CC };
     
     private static final int COLOR_REMOVABLE = 0x00BBBBBB;
     private static final int COLOR_CHANGE_BORDER = 0x30;
@@ -22,6 +27,21 @@ abstract class MobileDude extends Dude
         mColorDrawDarker = getBorderColor( mColorDraw, true );
         mColorDrawLighter = getBorderColor( mColorDraw, false );
     }
+    
+    public static final void setColors()
+    {
+        final Random rand = new Random();
+        
+        // Fisher-Yates shuffle
+        for ( int i = DUDE_COUNT; i > 1; --i )
+        {
+            final int j = rand.nextInt( i );
+            
+            final int temp = COLOR_DRAW[ j ];
+            COLOR_DRAW[ j ] = COLOR_DRAW[ i - 1 ];
+            COLOR_DRAW[ i - 1 ] = temp;
+        }
+    }
 
     public static final MobileDude getDude( final int pId )
     {
@@ -30,15 +50,15 @@ abstract class MobileDude extends Dude
         switch ( pId )
         {
             case 0:
-                dude = new MobileDude1( pId );
+                dude = new MobileDude1( pId, COLOR_DRAW[ pId ] );
                 break;
                 
             case 1:
-                dude = new MobileDude2( pId );
+                dude = new MobileDude2( pId, COLOR_DRAW[ pId ] );
                 break;
 
             case 2:
-                dude = new MobileDude3( pId );
+                dude = new MobileDude3( pId, COLOR_DRAW[ pId ] );
                 break;
                 
             default:

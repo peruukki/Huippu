@@ -14,13 +14,16 @@ final class MobileDudeGrid extends DudeGrid
     public MobileDudeGrid( final int pColumnCount, final int pRowCount )
     {
         super( pColumnCount, pRowCount, MobileDude.DUDE_COUNT );
+        MobileDude.setColors();
     }
     
     public MobileDudeGrid( final DataInputStream pInput )
         throws IOException
     {
         super( MobileDude.DUDE_COUNT, pInput );
+        MobileDude.setColors();
         mIsGridEmpty = true;
+        
         for ( int x = 0; x < mColumnCount; x++ )
         {
             for ( int y = 0; y < mRowCount; y++ )
