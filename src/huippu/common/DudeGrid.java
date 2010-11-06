@@ -107,6 +107,27 @@ public abstract class DudeGrid
         clearRemovable();
         setRemovable( mCurrentCell );
     }
+    
+    public final boolean moveDudes()
+    {
+        boolean stillMoving = false;
+        
+        for ( int x = 0; x < mColumnCount; x++ )
+        {
+            for ( int y = 0; y < mRowCount; y++ )
+            {
+                final Dude dude = mDudes[ x ][ y ]; 
+                if (    dude != null
+                     && dude.isMoving() )
+                     
+                {
+                    stillMoving |= dude.move();
+                }
+            }
+        }
+        
+        return stillMoving;
+    }
 
     public final int removeDudes()
     {

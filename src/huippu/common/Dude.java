@@ -16,6 +16,14 @@ public abstract class Dude
     protected int mWidth = 0;
     protected int mHeight = 0;
     
+    protected int mCurrentScreenX = 0;
+    protected int mCurrentScreenY = 0;
+    protected int mCurrentOffsetX = 0;
+    protected int mCurrentOffsetY = 0;
+    protected final int mMoveChangeX = 3;
+    protected final int mMoveChangeY = 3;
+    protected boolean mIsMoving = false;
+    
     private final int mId;
     
     public static void updateSize()
@@ -59,9 +67,53 @@ public abstract class Dude
         updatePositionY();
     }
     
+    private static final int updateCurrentOffset( final int pOffset,
+                                                  final int pChange )
+    {
+        int newOffset = pOffset;
+        
+        if ( pOffset < 0 )
+        {
+            newOffset += pChange;
+            if ( newOffset > 0 )
+            {
+                newOffset = 0;
+            }
+        }
+        else if ( pOffset > 0 )
+        {
+            newOffset -= pChange;
+            if ( newOffset < 0 )
+            {
+                newOffset = 0;
+            }
+        }
+        
+        return newOffset;
+    }
+    
+    public final boolean move()
+    {
+        if ( mIsMoving )
+        {
+            mCurrentOffsetX = updateCurrentOffset( mCurrentOffsetX,
+                                                   mMoveChangeX );
+            mCurrentOffsetY = updateCurrentOffset( mCurrentOffsetY,
+                                                   mMoveChangeY );
+            updateScreenPosition();
+            mIsMoving =    ( mCurrentOffsetX != 0 )
+                        || ( mCurrentOffsetY != 0 );
+        }
+        
+        return mIsMoving;
+    }
+    
     public void moveLeft( final int pCellCount )
     {
+        final int oldX = mScreenX;
         super.moveLeft( pCellCount );
+        mCurrentOffsetX = oldX - mScreenX - mMoveChangeX;
+        mIsMoving = true;
         updatePositionX();
     }
     
@@ -73,7 +125,10 @@ public abstract class Dude
     
     public void moveDown( final int pCellCount )
     {
+        final int oldY = mScreenY;
         super.moveDown( pCellCount );
+        mCurrentOffsetY = oldY - mScreenY + mMoveChangeY;
+        mIsMoving = true;
         updatePositionY();
     }
     
@@ -88,6 +143,11 @@ public abstract class Dude
         return mId;
     }
     
+    public final boolean isMoving()
+    {
+        return mIsMoving;
+    }
+    
     public boolean equals( final Object pOther )
     {
         return    pOther != null
@@ -99,6 +159,11 @@ public abstract class Dude
         mLeftX = mScreenX + mOffsetX;
         mRightX = mScreenX + mCellWidth - mOffsetX - 2;
         mWidth = mRightX - mLeftX;
+        if ( mIsMoving )
+        {
+            mLeftX += mCurrentOffsetX;
+            mRightX += mCurrentOffsetX;
+        }
     }
     
     protected void updatePositionY()
@@ -106,5 +171,10 @@ public abstract class Dude
         mTopY = mScreenY + mOffsetY;
         mBottomY = mScreenY + mCellHeight - mOffsetY - 2;
         mHeight = mBottomY - mTopY;
+        if ( mIsMoving )
+        {
+            mTopY += mCurrentOffsetY;
+            mBottomY += mCurrentOffsetY;
+        }
     }
 }

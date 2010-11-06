@@ -69,7 +69,11 @@ final class MobileDrome
     private TimerTask mRemoveCountTimerTask = null;
     private static final int REMOVE_COUNT_SHOW_MIN = 5;
     private static final int REMOVE_COUNT_TIMER_DELAY_MS = 1000;
-        
+    
+    private Timer mMoveDudesTimer = new Timer();
+    private TimerTask mMoveDudesTimerTask = null;
+    private static final int MOVE_DUDES_TIMER_DELAY_MS = 10;
+    
     private final Object mSync = new Object();
 	
     public MobileDrome( final MobileMain pApplication )
@@ -333,6 +337,21 @@ final class MobileDrome
         }
     }
     
+    private final void moveDudes()
+    {
+        synchronized ( mSync )
+        {
+            mMoveDudesTimerTask = null;
+        }
+        
+        if ( mState.getDudeGrid()
+                   .moveDudes() )
+        {
+            startMoveDudesTimer();
+        }
+        repaint();
+    }
+    
     private final void clearRemoveCountString()
     {
         synchronized ( mSync )
@@ -485,34 +504,8 @@ final class MobileDrome
                         dromeFinishSuccess = false;
                     }
 
-                    // Update remove count string
-                    synchronized ( mSync )
-                    {
-                        // Cancel possibly pending timer
-                        if ( mRemoveCountTimerTask != null )
-                        {
-                            mRemoveCountTimerTask.cancel();
-                            mRemoveCountTimerTask = null;
-                        }
-                        
-                        if ( removeCount >= REMOVE_COUNT_SHOW_MIN )
-                        {
-                            mRemoveCountString = Integer.toString( removeCount );
-                            mRemoveCountTimerTask = new TimerTask()
-                                {
-                                    public final void run()
-                                    {
-                                        clearRemoveCountString();
-                                    }
-                                };
-                            mRemoveCountTimer.schedule( mRemoveCountTimerTask,
-                                                        REMOVE_COUNT_TIMER_DELAY_MS );
-                        }
-                        else
-                        {
-                            mRemoveCountString = null;
-                        }
-                    }
+                    startMoveDudesTimer();
+                    updateRemoveCountString( removeCount );
                 }
                 updateCurrentCell = false;
                 break;
@@ -537,6 +530,56 @@ final class MobileDrome
         if ( dromeFinished )
         {
             dromeFinished( dromeFinishSuccess, false );
+        }
+    }
+    
+    private final void startMoveDudesTimer()
+    {
+        synchronized ( mSync )
+        {
+            if ( mMoveDudesTimerTask == null )
+            {
+                mMoveDudesTimerTask = new TimerTask()
+                    {
+                        public final void run()
+                        {
+                            moveDudes();
+                        }
+                    };
+                mMoveDudesTimer.schedule( mMoveDudesTimerTask,
+                                          MOVE_DUDES_TIMER_DELAY_MS );
+            }
+        }
+    }
+    
+    private final void updateRemoveCountString( final int pRemoveCount )
+    {
+        synchronized ( mSync )
+        {
+            // Cancel possibly pending timer
+            if ( mRemoveCountTimerTask != null )
+            {
+                mRemoveCountTimerTask.cancel();
+                mRemoveCountTimerTask = null;
+            }
+            
+            if ( pRemoveCount >= REMOVE_COUNT_SHOW_MIN )
+            {
+                mRemoveCountString = Integer.toString( pRemoveCount );
+                mRemoveCountTimerTask = new TimerTask()
+                    {
+                        public final void run()
+                        {
+                            clearRemoveCountString();
+                        }
+                    };
+                mRemoveCountTimer.schedule( mRemoveCountTimerTask,
+                                            REMOVE_COUNT_TIMER_DELAY_MS );
+            }
+            else
+            {
+                mRemoveCountString = null;
+            }
         }
     }
 

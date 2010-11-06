@@ -68,7 +68,8 @@ final class MobileDudeGrid extends DudeGrid
                 final MobileDude dude = (MobileDude) mDudes[ x ][ y ];
                 if ( dude != null )
                 {
-                    if ( mRemovable[ x ][ y ] )
+                    if (    mRemovable[ x ][ y ] 
+                         && !dude.isMoving() )
                     {
                         dude.drawAsRemovable( g );                    
                     }
