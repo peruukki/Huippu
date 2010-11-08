@@ -74,7 +74,8 @@ final class MobileDrome
     private TimerTask mMoveDudesTimerTask = null;
     private static final int MOVE_DUDES_TIMER_DELAY_MS = 10;
     
-    private final Object mSync = new Object();
+    private final Object mSyncTimer = new Object();
+    private final Object mSyncMove = new Object();
 	
     public MobileDrome( final MobileMain pApplication )
     {
@@ -339,13 +340,19 @@ final class MobileDrome
     
     private final void moveDudes()
     {
-        synchronized ( mSync )
+        synchronized ( mSyncTimer )
         {
             mMoveDudesTimerTask = null;
         }
         
-        if ( mState.getDudeGrid()
-                   .moveDudes() )
+        boolean stillMoving;
+        synchronized ( mSyncMove )
+        {
+            stillMoving = mState.getDudeGrid()
+                                .moveDudes();
+        }
+        
+        if ( stillMoving )
         {
             startMoveDudesTimer();
         }
@@ -354,7 +361,7 @@ final class MobileDrome
     
     private final void clearRemoveCountString()
     {
-        synchronized ( mSync )
+        synchronized ( mSyncTimer )
         {
             mRemoveCountString = null;
             mRemoveCountTimerTask = null;
@@ -483,7 +490,11 @@ final class MobileDrome
 
             case Canvas.FIRE:
                 final DudeGrid dudeGrid = mState.getDudeGrid();
-                final int removeCount = dudeGrid.removeDudes();
+                final int removeCount;                
+                synchronized ( mSyncMove )
+                {
+                    removeCount = dudeGrid.removeDudes();
+                }
                 if ( removeCount > 0 )
                 {
                     final int increment = getScoreIncrement( removeCount );
@@ -535,7 +546,7 @@ final class MobileDrome
     
     private final void startMoveDudesTimer()
     {
-        synchronized ( mSync )
+        synchronized ( mSyncTimer )
         {
             if ( mMoveDudesTimerTask == null )
             {
@@ -554,7 +565,7 @@ final class MobileDrome
     
     private final void updateRemoveCountString( final int pRemoveCount )
     {
-        synchronized ( mSync )
+        synchronized ( mSyncTimer )
         {
             // Cancel possibly pending timer
             if ( mRemoveCountTimerTask != null )

@@ -20,9 +20,11 @@ public abstract class Dude
     protected int mCurrentScreenY = 0;
     protected int mCurrentOffsetX = 0;
     protected int mCurrentOffsetY = 0;
-    protected final int mMoveChangeX = 3;
-    protected final int mMoveChangeY = 3;
+    protected static final int mMoveChangeX = 3;
+    protected static final int mMoveChangeY = mMoveChangeX;
     protected boolean mIsMoving = false;
+    
+    protected boolean mIsRemoved = false;
     
     private final int mId;
     
@@ -92,6 +94,16 @@ public abstract class Dude
         return newOffset;
     }
     
+    public final void setRemoved()
+    {
+        mIsRemoved = true;
+    }
+    
+    public final boolean isRemoved()
+    {
+        return mIsRemoved;
+    }
+    
     public final boolean move()
     {
         if ( mIsMoving )
@@ -112,7 +124,7 @@ public abstract class Dude
     {
         final int oldX = mScreenX;
         super.moveLeft( pCellCount );
-        mCurrentOffsetX = oldX - mScreenX - mMoveChangeX;
+        mCurrentOffsetX += oldX - mScreenX;
         mIsMoving = true;
         updatePositionX();
     }
@@ -127,7 +139,7 @@ public abstract class Dude
     {
         final int oldY = mScreenY;
         super.moveDown( pCellCount );
-        mCurrentOffsetY = oldY - mScreenY + mMoveChangeY;
+        mCurrentOffsetY += oldY - mScreenY;
         mIsMoving = true;
         updatePositionY();
     }

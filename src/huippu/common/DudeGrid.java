@@ -29,6 +29,8 @@ public abstract class DudeGrid
     protected final Dude[][] mDudes;
     protected boolean mIsGridEmpty = false;
     
+    protected Stack mMovingDudes;
+    
     protected final boolean[][] mRemovable;
     protected int mRemovableFirstCol = INVALID_COLUMN;
     protected int mRemovableLastCol = INVALID_COLUMN;
@@ -44,6 +46,7 @@ public abstract class DudeGrid
         
         mDudes = new Dude[ mColumnCount ][ mRowCount ];
         mRemovable = new boolean[ mColumnCount ][ mRowCount ];
+        
         mMaxRandomValue =   BASIC_MAX_RANDOM_VALUE
                           - ( BASIC_MAX_RANDOM_VALUE % mDudeCount );
         mProportionBasic = mMaxRandomValue / mDudeCount;
@@ -110,23 +113,21 @@ public abstract class DudeGrid
     
     public final boolean moveDudes()
     {
-        boolean stillMoving = false;
-        
-        for ( int x = 0; x < mColumnCount; x++ )
+        final Stack newMovingDudes =
+            new Stack( mMovingDudes.getItemCount() );
+
+        while ( !mMovingDudes.isEmpty() )
         {
-            for ( int y = 0; y < mRowCount; y++ )
+            final Dude dude = (Dude) mMovingDudes.pop();
+            if (    !dude.isRemoved()
+                 && dude.move() )
             {
-                final Dude dude = mDudes[ x ][ y ]; 
-                if (    dude != null
-                     && dude.isMoving() )
-                     
-                {
-                    stillMoving |= dude.move();
-                }
+                newMovingDudes.push( dude );
             }
         }
         
-        return stillMoving;
+        mMovingDudes = newMovingDudes;
+        return !mMovingDudes.isEmpty();
     }
 
     public final int removeDudes()
@@ -208,8 +209,9 @@ public abstract class DudeGrid
             {
                 if ( mRemovable[ x ][ y ] )
                 {
+                    mDudes[ x ][ y ].setRemoved();
                     mDudes[ x ][ y ] = null;
-                    removeCount ++;
+                    removeCount++;
                 }
             }
         }
@@ -219,6 +221,7 @@ public abstract class DudeGrid
     
     private final boolean moveDudesAfterRemove()
     {
+        mMovingDudes = new Stack( mColumnCount * mRowCount, mMovingDudes );
         moveDudesDown();
         return moveDudesLeft();
     }
@@ -237,6 +240,10 @@ public abstract class DudeGrid
                 }
                 else if ( moveCount > 0 )
                 {
+                    if ( !dude.isMoving() )
+                    {
+                        mMovingDudes.push( dude );
+                    }
                     moveDudeDown( dude, moveCount );
                 }
             }
@@ -281,6 +288,10 @@ public abstract class DudeGrid
             noDudesLeft = ( dude == null ); 
             if ( !noDudesLeft )
             {
+                if ( !dude.isMoving() )
+                {
+                    mMovingDudes.push( dude );
+                }
                 moveDudeLeft( dude, pCount );
             }
         }
