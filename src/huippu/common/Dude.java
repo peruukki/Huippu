@@ -20,9 +20,22 @@ public abstract class Dude
     protected int mCurrentScreenY = 0;
     protected int mCurrentOffsetX = 0;
     protected int mCurrentOffsetY = 0;
-    protected static final int mMoveChangeX = 3;
+    protected static final int mMoveChangeX = 4;
     protected static final int mMoveChangeY = mMoveChangeX;
     protected boolean mIsMoving = false;
+
+    protected static final int mGoOverOffsetX = 0;
+    protected static final int mGoOverOffsetY = 2;
+    protected static final int mGoOverWaitRoundsX = 3;
+    protected static final int mGoOverWaitRoundsY = mGoOverWaitRoundsX;
+    protected static final int mGoUnderWaitRoundsX = 2;
+    protected static final int mGoUnderWaitRoundsY = mGoUnderWaitRoundsX;
+    protected int mGoOverWaitCountX = 0;
+    protected int mGoOverWaitCountY = 0;
+    protected boolean mGoOverX = false;
+    protected boolean mGoUnderX = false;
+    protected boolean mGoOverY = false;
+    protected boolean mGoUnderY = false;
     
     protected boolean mIsRemoved = false;
     
@@ -70,7 +83,8 @@ public abstract class Dude
     }
     
     private static final int updateCurrentOffset( final int pOffset,
-                                                  final int pChange )
+                                                  final int pChange,
+                                                  final int pGoOverOffset )
     {
         int newOffset = pOffset;
         
@@ -91,6 +105,12 @@ public abstract class Dude
             }
         }
         
+        if (    newOffset == 0
+             && pGoOverOffset != 0 )
+        {
+            newOffset = pGoOverOffset;
+        }
+        
         return newOffset;
     }
     
@@ -108,10 +128,52 @@ public abstract class Dude
     {
         if ( mIsMoving )
         {
-            mCurrentOffsetX = updateCurrentOffset( mCurrentOffsetX,
-                                                   mMoveChangeX );
-            mCurrentOffsetY = updateCurrentOffset( mCurrentOffsetY,
-                                                   mMoveChangeY );
+            if ( mGoOverWaitCountX == 0 )
+            {
+                mCurrentOffsetX =
+                    updateCurrentOffset( mCurrentOffsetX,
+                                         mMoveChangeX,
+                                            mGoOverX
+                                         ? -mGoOverOffsetX
+                                         : 0 );
+                if ( mCurrentOffsetX < 0 )
+                {
+                    mGoOverX = false;
+                    mGoOverWaitCountX = mGoOverWaitRoundsX;
+                }
+            }
+            else
+            {
+                --mGoOverWaitCountX;
+            }
+            
+            if ( mGoOverWaitCountY == 0 )
+            {
+                mCurrentOffsetY =
+                    updateCurrentOffset( mCurrentOffsetY,
+                                         mMoveChangeY,
+                                         (   mGoOverY
+                                           ? mGoOverOffsetY
+                                           : (   mGoUnderY
+                                               ? -mGoOverOffsetY
+                                               : 0 ) ) );
+                if ( mCurrentOffsetY > 0 )
+                {
+                    mGoOverY = false;
+                    mGoUnderY = true;
+                    mGoOverWaitCountY = mGoOverWaitRoundsY;
+                }
+                else if ( mGoUnderY )
+                {
+                    mGoUnderY = false;
+                    mGoOverWaitCountY = mGoUnderWaitRoundsY;
+                }
+            }
+            else
+            {
+                --mGoOverWaitCountY;
+            }
+            
             updateScreenPosition();
             mIsMoving =    ( mCurrentOffsetX != 0 )
                         || ( mCurrentOffsetY != 0 );
@@ -125,6 +187,7 @@ public abstract class Dude
         final int oldX = mScreenX;
         super.moveLeft( pCellCount );
         mCurrentOffsetX += oldX - mScreenX;
+        mGoOverX = true;
         mIsMoving = true;
         updatePositionX();
     }
@@ -140,6 +203,7 @@ public abstract class Dude
         final int oldY = mScreenY;
         super.moveDown( pCellCount );
         mCurrentOffsetY += oldY - mScreenY;
+        mGoOverY = true;
         mIsMoving = true;
         updatePositionY();
     }

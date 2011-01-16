@@ -83,8 +83,8 @@ public final class Score
         new Score( 1074, 11, new ScoreDate( 24,  9, 10 ) ),
         new Score(  714,  7, new ScoreDate( 20,  3, 10 ) ),
         new Score(  706,  8, new ScoreDate( 21,  8, 10 ) ),
+        new Score(  683,  7, new ScoreDate( 29, 10, 10 ) ),
         new Score(  617,  6, new ScoreDate(  2,  5, 10 ) ),
-        new Score(  589,  6, new ScoreDate(  2,  7, 10 ) ),
     };
     
     private static final Score[] mScoresTotalSmallest = new Score[]
@@ -99,10 +99,10 @@ public final class Score
     private static final Score[] mScoresLevelBiggest = new Score[]
     {
         new Score( 133, 1, new ScoreDate(  9,  2, 10 ) ),
+        new Score( 130, 1, new ScoreDate( 29, 10, 10 ) ),
         new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 125, 1, new ScoreDate( 10,  2, 10 ) ),
-        new Score( 124, 1, new ScoreDate( 26, 10, 10 ) ),
     };
     
     private static final Score[] mScoresLevelSmallest = new Score[]
@@ -111,16 +111,16 @@ public final class Score
         new Score( 79, 6, new ScoreDate( 21,  8, 10 ) ),
         new Score( 79, 3, new ScoreDate( 21,  8, 10 ) ),
         new Score( 82, 9, new ScoreDate( 24,  9, 10 ) ),
-        new Score( 87, 2, new ScoreDate(  5,  9, 10 ) ),
+        new Score( 85, 6, new ScoreDate( 29, 10, 10 ) ),
     };
     
     private static final Score[] mRemovesLevelSmallest = new Score[]
     {
         new Score(  7,  1, new ScoreDate(  9,  2, 10 ) ),
+        new Score(  8,  1, new ScoreDate( 29, 10, 10 ) ),
         new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
         new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 10,  1, new ScoreDate( 26, 10, 10 ) ),
-        new Score( 10,  1, new ScoreDate(  2,  5, 10 ) ),
     };
     
     private static final Score[] mRemovesLevelBiggest = new Score[]
@@ -134,11 +134,11 @@ public final class Score
     
     private static final Score[] mRemovesBiggest = new Score[]
     {
+        new Score( 37,  1, new ScoreDate( 29, 10, 10 ) ),
         new Score( 32,  1, new ScoreDate(  2,  5, 10 ) ),
         new Score( 30,  1, new ScoreDate( 12,  3, 10 ) ),
         new Score( 29,  1, new ScoreDate(  3,  4, 10 ) ),
         new Score( 27,  1, new ScoreDate(  7,  7, 10 ) ),
-        new Score( 27,  1, new ScoreDate( 14,  6, 10 ) ),
     };
 
     static final Score[] getInitialScoresTotalBiggest()
