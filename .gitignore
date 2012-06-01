@@ -1,8 +1,4 @@
-# Ignore temporary files
 .mtj.tmp/*
-
-# Ignore class files
 *.class
-
-# Ignore deployed
 deployed/*
+reports/*
