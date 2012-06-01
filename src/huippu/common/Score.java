@@ -6,7 +6,7 @@ import java.io.IOException;
 public final class Score
     implements IStorable
 {
-    private static final boolean mUseAllZero = false;
+    private static final boolean USE_ALL_ZERO = false;
     
     private final int mValue;
     private final int mLevel;
@@ -78,7 +78,7 @@ public final class Score
         return mDate;
     }
     
-    private static final Score[] mScoresTotalBiggest = new Score[]
+    private static final Score[] SCORES_TOTAL_BIGGEST = new Score[]
     {
         new Score( 1074, 11, new ScoreDate( 24,  9, 10 ) ),
         new Score(  714,  7, new ScoreDate( 20,  3, 10 ) ),
@@ -87,7 +87,7 @@ public final class Score
         new Score(  617,  6, new ScoreDate(  2,  5, 10 ) ),
     };
     
-    private static final Score[] mScoresTotalSmallest = new Score[]
+    private static final Score[] SCORES_TOTAL_SMALLEST = new Score[]
     {
         new Score( 55, 1, new ScoreDate(  5,  9, 10 ) ),
         new Score( 68, 1, new ScoreDate(  7,  7, 10 ) ),
@@ -96,7 +96,7 @@ public final class Score
         new Score( 77, 1, new ScoreDate( 24, 10, 10 ) ),
     };
     
-    private static final Score[] mScoresLevelBiggest = new Score[]
+    private static final Score[] SCORES_LEVEL_BIGGEST = new Score[]
     {
         new Score( 133, 1, new ScoreDate(  9,  2, 10 ) ),
         new Score( 130, 1, new ScoreDate( 29, 10, 10 ) ),
@@ -105,7 +105,7 @@ public final class Score
         new Score( 125, 1, new ScoreDate( 10,  2, 10 ) ),
     };
     
-    private static final Score[] mScoresLevelSmallest = new Score[]
+    private static final Score[] SCORES_LEVEL_SMALLEST = new Score[]
     {
         new Score( 71, 1, new ScoreDate( 21,  3, 10 ) ),
         new Score( 79, 6, new ScoreDate( 21,  8, 10 ) ),
@@ -114,7 +114,7 @@ public final class Score
         new Score( 85, 6, new ScoreDate( 29, 10, 10 ) ),
     };
     
-    private static final Score[] mRemovesLevelSmallest = new Score[]
+    private static final Score[] REMOVES_LEVEL_SMALLEST = new Score[]
     {
         new Score(  7,  1, new ScoreDate(  9,  2, 10 ) ),
         new Score(  8,  1, new ScoreDate( 29, 10, 10 ) ),
@@ -123,7 +123,7 @@ public final class Score
         new Score( 10,  1, new ScoreDate( 26, 10, 10 ) ),
     };
     
-    private static final Score[] mRemovesLevelBiggest = new Score[]
+    private static final Score[] REMOVES_LEVEL_BIGGEST = new Score[]
     {
         new Score( 25,  6, new ScoreDate( 21,  8, 10 ) ),
         new Score( 25,  3, new ScoreDate( 21,  8, 10 ) ),
@@ -132,7 +132,7 @@ public final class Score
         new Score( 24,  1, new ScoreDate(  2,  5, 10 ) ),
     };
     
-    private static final Score[] mRemovesBiggest = new Score[]
+    private static final Score[] REMOVES_BIGGEST = new Score[]
     {
         new Score( 37,  1, new ScoreDate( 29, 10, 10 ) ),
         new Score( 32,  1, new ScoreDate(  2,  5, 10 ) ),
@@ -143,85 +143,85 @@ public final class Score
 
     static final Score[] getInitialScoresTotalBiggest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mScoresTotalBiggest.length );
+            return getEmptyScores( SCORES_TOTAL_BIGGEST.length );
         }
         else
         {
-            return mScoresTotalBiggest;
+            return SCORES_TOTAL_BIGGEST;
         }
     }
 
     static final Score[] getInitialScoresTotalSmallest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mScoresTotalSmallest.length );
+            return getEmptyScores( SCORES_TOTAL_SMALLEST.length );
         }
         else
         {
-            return mScoresTotalSmallest;
+            return SCORES_TOTAL_SMALLEST;
         }
     }
     
     static final Score[] getInitialScoresLevelBiggest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mScoresLevelBiggest.length );
+            return getEmptyScores( SCORES_LEVEL_BIGGEST.length );
         }
         else
         {
-            return mScoresLevelBiggest;
+            return SCORES_LEVEL_BIGGEST;
         }
     }
     
     static final Score[] getInitialScoresLevelSmallest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mScoresLevelSmallest.length );
+            return getEmptyScores( SCORES_LEVEL_SMALLEST.length );
         }
         else
         {
-            return mScoresLevelSmallest;
+            return SCORES_LEVEL_SMALLEST;
         }
     }
     
     static final Score[] getInitialRemovesLevelSmallest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mRemovesLevelSmallest.length );
+            return getEmptyScores( REMOVES_LEVEL_SMALLEST.length );
         }
         else
         {
-            return mRemovesLevelSmallest;
+            return REMOVES_LEVEL_SMALLEST;
         }
     }
     
     static final Score[] getInitialRemovesLevelBiggest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mRemovesLevelBiggest.length );
+            return getEmptyScores( REMOVES_LEVEL_BIGGEST.length );
         }
         else
         {
-            return mRemovesLevelBiggest;
+            return REMOVES_LEVEL_BIGGEST;
         }
     }
     
     static final Score[] getInitialRemovesBiggest()
     {
-        if ( mUseAllZero )
+        if ( USE_ALL_ZERO )
         {
-            return getEmptyScores( mRemovesBiggest.length );
+            return getEmptyScores( REMOVES_BIGGEST.length );
         }
         else
         {
-            return mRemovesBiggest;
+            return REMOVES_BIGGEST;
         }
     }
     

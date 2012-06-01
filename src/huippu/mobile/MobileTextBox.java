@@ -15,20 +15,18 @@ final class MobileTextBox
     private final int mWidth;
     private final int mHeight;
     
-    private final int mTextWidth;
-    private final int mTextHeight;
     private final MobileText mText;
     
     public MobileTextBox( final String pText, final int pX, final int pY,
                           final Font pFont )
     {
-        mTextWidth = getTextWidth( pFont, pText );
-        mTextHeight = getTextHeight( pFont );
+        final int textWidth = getTextWidth( pFont, pText );
+        final int textHeight = getTextHeight( pFont );
         
-        mLeftX = pX - ( mTextWidth / 2 ) - BORDER;
-        mTopY = pY - ( mTextHeight / 2 ) - BORDER;
-        mWidth = mTextWidth + ( 2 * BORDER ) - 1;
-        mHeight = mTextHeight + ( 2 * BORDER ) - 1 - BOTTOM_REDUCTION;
+        mLeftX = pX - ( textWidth / 2 ) - BORDER;
+        mTopY = pY - ( textHeight / 2 ) - BORDER;
+        mWidth = textWidth + ( 2 * BORDER ) - 1;
+        mHeight = textHeight + ( 2 * BORDER ) - 1 - BOTTOM_REDUCTION;
         
         mText = new MobileText( pText,
                                 mLeftX + BORDER,

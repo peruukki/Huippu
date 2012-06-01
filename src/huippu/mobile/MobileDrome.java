@@ -39,8 +39,8 @@ final class MobileDrome
     private static final int REDUCE_WIDTH = 0;  // 52
     private static final int REDUCE_HEIGHT = 0; // 75
     
-    private int mColumnCount = 11;
-    private int mRowCount = 7;
+    private static final int COLUMN_COUNT = 11;
+    private static final int ROW_COUNT = 7;
 
     private int mDromeOffsetX = 0;
     private int mDromeOffsetY = 0;
@@ -65,12 +65,12 @@ final class MobileDrome
     
     private String mRemoveCountString = null;
     private MobileTextBox mRemoveCountText = null;
-    private Timer mRemoveCountTimer = new Timer();
+    private final Timer mRemoveCountTimer = new Timer();
     private TimerTask mRemoveCountTimerTask = null;
     private static final int REMOVE_COUNT_SHOW_MIN = 5;
     private static final int REMOVE_COUNT_TIMER_DELAY_MS = 1000;
     
-    private Timer mMoveDudesTimer = new Timer();
+    private final Timer mMoveDudesTimer = new Timer();
     private TimerTask mMoveDudesTimerTask = null;
     private static final int MOVE_DUDES_TIMER_DELAY_MS = 10;
     
@@ -81,7 +81,7 @@ final class MobileDrome
     {
         mDisplay = Display.getDisplay( pApplication );
         mMenu = new MobileMenu( pApplication, this );
-        DromeComponent.setGridSize( mColumnCount, mRowCount );
+        DromeComponent.setGridSize( COLUMN_COUNT, ROW_COUNT );
         mState = getInitialState();
         setFullScreenMode( true );
         reinit();
@@ -93,7 +93,7 @@ final class MobileDrome
         GameState state = null;
         
         // Try to read stored game state first
-        RecordStore store = MobileStorable.openStore( STORE_GAME_STATE, false, false );
+        final RecordStore store = MobileStorable.openStore( STORE_GAME_STATE, false, false );
         if ( store != null )
         {
             try
@@ -120,8 +120,8 @@ final class MobileDrome
         else
         {
             // Create new uninitialized DudeGrid
-            state = new GameState( new MobileDudeGrid( mColumnCount,
-                                                       mRowCount ),
+            state = new GameState( new MobileDudeGrid( COLUMN_COUNT,
+                                                       ROW_COUNT ),
                                    new MobilePointer() );
         }
         
@@ -172,14 +172,14 @@ final class MobileDrome
         mScreenWidth = pWidth;
         mScreenHeight = pHeight;
         
-        mDromeWidth = round( pWidth, mColumnCount );
-        mDromeHeight = round( pHeight - 2 * TEXT_HEIGHT, mRowCount );
+        mDromeWidth = round( pWidth, COLUMN_COUNT );
+        mDromeHeight = round( pHeight - 2 * TEXT_HEIGHT, ROW_COUNT );
         
         mDromeOffsetX = ( mScreenWidth - mDromeWidth ) / 2;
         mDromeOffsetY = 1;
         
-        mCellWidth = mDromeWidth / mColumnCount;
-        mCellHeight = mDromeHeight / mRowCount;
+        mCellWidth = mDromeWidth / COLUMN_COUNT;
+        mCellHeight = mDromeHeight / ROW_COUNT;
     }
     
     private final void initPointer()

@@ -20,16 +20,16 @@ public abstract class Dude
     protected int mCurrentScreenY = 0;
     protected int mCurrentOffsetX = 0;
     protected int mCurrentOffsetY = 0;
-    protected static final int mMoveChangeX = 4;
-    protected static final int mMoveChangeY = mMoveChangeX;
+    protected static final int MOVE_CHANGE_X = 4;
+    protected static final int MOVE_CHANGE_Y = MOVE_CHANGE_X;
     protected boolean mIsMoving = false;
 
-    protected static final int mGoOverOffsetX = 0;
-    protected static final int mGoOverOffsetY = 2;
-    protected static final int mGoOverWaitRoundsX = 3;
-    protected static final int mGoOverWaitRoundsY = mGoOverWaitRoundsX;
-    protected static final int mGoUnderWaitRoundsX = 2;
-    protected static final int mGoUnderWaitRoundsY = mGoUnderWaitRoundsX;
+    protected static final int GO_OVER_OFFSET_X = 0;
+    protected static final int GO_OVER_OFFSET_Y = 2;
+    protected static final int GO_OVER_WAIT_ROUNDS_X = 3;
+    protected static final int GO_OVER_WAIT_ROUNDS_Y = GO_OVER_WAIT_ROUNDS_X;
+    protected static final int GO_UNDER_WAIT_ROUNDS_X = 2;
+    protected static final int GO_UNDER_WAIT_ROUNDS_Y = GO_UNDER_WAIT_ROUNDS_X;
     protected int mGoOverWaitCountX = 0;
     protected int mGoOverWaitCountY = 0;
     protected boolean mGoOverX = false;
@@ -132,14 +132,14 @@ public abstract class Dude
             {
                 mCurrentOffsetX =
                     updateCurrentOffset( mCurrentOffsetX,
-                                         mMoveChangeX,
+                                         MOVE_CHANGE_X,
                                             mGoOverX
-                                         ? -mGoOverOffsetX
+                                         ? -GO_OVER_OFFSET_X
                                          : 0 );
                 if ( mCurrentOffsetX < 0 )
                 {
                     mGoOverX = false;
-                    mGoOverWaitCountX = mGoOverWaitRoundsX;
+                    mGoOverWaitCountX = GO_OVER_WAIT_ROUNDS_X;
                 }
             }
             else
@@ -151,22 +151,22 @@ public abstract class Dude
             {
                 mCurrentOffsetY =
                     updateCurrentOffset( mCurrentOffsetY,
-                                         mMoveChangeY,
+                                         MOVE_CHANGE_Y,
                                          (   mGoOverY
-                                           ? mGoOverOffsetY
+                                           ? GO_OVER_OFFSET_Y
                                            : (   mGoUnderY
-                                               ? -mGoOverOffsetY
+                                               ? -GO_OVER_OFFSET_Y
                                                : 0 ) ) );
                 if ( mCurrentOffsetY > 0 )
                 {
                     mGoOverY = false;
                     mGoUnderY = true;
-                    mGoOverWaitCountY = mGoOverWaitRoundsY;
+                    mGoOverWaitCountY = GO_OVER_WAIT_ROUNDS_Y;
                 }
                 else if ( mGoUnderY )
                 {
                     mGoUnderY = false;
-                    mGoOverWaitCountY = mGoUnderWaitRoundsY;
+                    mGoOverWaitCountY = GO_UNDER_WAIT_ROUNDS_Y;
                 }
             }
             else
