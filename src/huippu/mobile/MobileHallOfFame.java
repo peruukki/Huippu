@@ -265,7 +265,7 @@ final class MobileHallOfFame extends HallOfFame
             levelItem.setPreferredSize( mLevelWidth, -1 );
             mForm.append( levelItem );
             
-            mForm.append( String.valueOf( pScore.getDate() ) + "\n" );
+            mForm.append( pScore.getDate().toString() + "\n" );
         }
     }
     

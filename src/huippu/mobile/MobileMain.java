@@ -15,8 +15,7 @@ import javax.microedition.midlet.MIDletStateChangeException;
 public final class MobileMain
     extends MIDlet
 {
-    private Thread mThread = null;
-    private final MobileDrome mDrome;
+    private transient final MobileDrome mDrome;
     
     private static Displayable mCurrentScreen = null;
     private static MIDlet mMIDlet;
@@ -50,8 +49,8 @@ public final class MobileMain
         try
         {
             // Start the game in its own thread
-            mThread = new Thread( mDrome );
-            mThread.start();
+            new Thread( mDrome )
+                .start();
         }
         catch ( final Error e )
         {

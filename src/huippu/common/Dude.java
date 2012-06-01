@@ -230,6 +230,11 @@ public abstract class Dude
                && getClass().equals( pOther.getClass() );
     }
     
+    public int hashCode()
+    {
+        return -1;
+    }
+
     protected void updatePositionX()
     {
         mLeftX = mScreenX + mOffsetX;

@@ -44,4 +44,6 @@ public final class Resources
     
     // Misc
     public static final String DATE_DELIM = ".";
+
+    private Resources() {}
 }
