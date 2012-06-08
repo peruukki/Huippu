@@ -2,7 +2,7 @@ Huippu is a Java puzzle game for plain old non-smart non-touch mobile phones.
 
 The object of the game is to remove all the pieces from the board. You can only remove pieces that have similar pieces next to them horizontally or vertically. The pieces move to the left when entire columns have been removed. They also fall downwards when pieces are removed from underneath.
 
-The more pieces you remote at once, the more points you get. The game keeps track of various kinds of high or low scores. The levels get more difficult as you proceed.
+The more pieces you remove at once, the more points you get. The game keeps track of various kinds of high or low scores. The levels get more difficult as you proceed.
 
 You can move the selector with the keys 2, 4, 6, and 8. Pieces can be removed with the key 5.
 
