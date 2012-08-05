@@ -612,11 +612,8 @@ final class MobileDrome
             
             if ( !pInitialState )
             {
-                if ( pSuccess )
-                {
-                    updateLevelStats( pSuccess );
-                }
-                else
+                updateLevelStats( pSuccess );
+                if ( !pSuccess )
                 {
                     updateTotalStats();
                 }
