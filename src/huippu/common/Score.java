@@ -85,11 +85,11 @@ public final class Score
         new Score(  714,  7, new ScoreDate( 20,  3, 10 ) ),
         new Score(  706,  8, new ScoreDate( 21,  8, 10 ) ),
         new Score(  693,  7, new ScoreDate(  2,  5, 12 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score(  619,  6, new ScoreDate(  7,  8, 12 ) ),
+        new Score(  408,  4, new ScoreDate(  6,  8, 12 ) ),
+        new Score(  319,  3, new ScoreDate(  5,  8, 12 ) ),
+        new Score(  214,  2, new ScoreDate(  8,  8, 12 ) ),
+        new Score(  213,  2, new ScoreDate(  5,  8, 12 ) ),
     };
     
     private static final Score[] SCORES_TOTAL_SMALLEST = new Score[]
@@ -99,11 +99,11 @@ public final class Score
         new Score( 68, 1, new ScoreDate( 11, 11, 10 ) ),
         new Score( 68, 1, new ScoreDate(  7,  7, 10 ) ),
         new Score( 69, 1, new ScoreDate( 27,  9, 10 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 80, 1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 87, 1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 95, 1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 95, 1, new ScoreDate(  5,  8, 12 ) ),
+        new Score(100, 1, new ScoreDate(  8,  8, 12 ) ),
     };
     
     private static final Score[] SCORES_LEVEL_BIGGEST = new Score[]
@@ -113,11 +113,11 @@ public final class Score
         new Score( 127, 1, new ScoreDate(  9,  8, 11 ) ),
         new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
         new Score( 127, 1, new ScoreDate( 22,  2, 10 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 118, 2, new ScoreDate(  5,  8, 12 ) ),
+        new Score( 115, 1, new ScoreDate(  8,  8, 12 ) ),
+        new Score( 115, 1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 112, 3, new ScoreDate(  7,  8, 12 ) ),
+        new Score( 110, 1, new ScoreDate(  6,  8, 12 ) ),
     };
     
     private static final Score[] SCORES_LEVEL_SMALLEST = new Score[]
@@ -125,13 +125,13 @@ public final class Score
         new Score( 71, 1, new ScoreDate( 21,  3, 10 ) ),
         new Score( 79, 6, new ScoreDate( 21,  8, 10 ) ),
         new Score( 79, 3, new ScoreDate( 21,  8, 10 ) ),
+        new Score( 80, 1, new ScoreDate(  6,  8, 12 ) ),
         new Score( 82, 1, new ScoreDate( 17,  8, 11 ) ),
         new Score( 82, 1, new ScoreDate( 24,  2, 11 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 87, 1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 92, 6, new ScoreDate(  7,  8, 12 ) ),
+        new Score( 94, 2, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 95, 1, new ScoreDate(  6,  8, 12 ) ),
     };
     
     private static final Score[] REMOVES_LEVEL_SMALLEST = new Score[]
@@ -141,11 +141,11 @@ public final class Score
         new Score(  9,  1, new ScoreDate(  9,  8, 11 ) ),
         new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
         new Score(  9,  1, new ScoreDate( 22,  2, 10 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 12,  2, new ScoreDate(  5,  8, 12 ) ),
+        new Score( 13,  1, new ScoreDate(  8,  8, 12 ) ),
+        new Score( 13,  1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 14,  3, new ScoreDate(  7,  8, 12 ) ),
+        new Score( 15,  1, new ScoreDate(  6,  8, 12 ) ),
     };
     
     private static final Score[] REMOVES_LEVEL_BIGGEST = new Score[]
@@ -155,11 +155,11 @@ public final class Score
         new Score( 24,  1, new ScoreDate( 17,  8, 11 ) ),
         new Score( 24,  1, new ScoreDate( 24,  2, 11 ) ),
         new Score( 24,  9, new ScoreDate( 24,  9, 10 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 19,  3, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 18,  5, new ScoreDate(  7,  8, 12 ) ),
+        new Score( 18,  4, new ScoreDate(  7,  8, 12 ) ),
+        new Score( 18,  1, new ScoreDate(  5,  8, 12 ) ),
+        new Score( 16,  1, new ScoreDate(  8,  8, 12 ) ),
     };
     
     private static final Score[] REMOVES_BIGGEST = new Score[]
@@ -169,11 +169,11 @@ public final class Score
         new Score( 32,  1, new ScoreDate(  2,  5, 10 ) ),
         new Score( 31,  1, new ScoreDate( 22, 11, 10 ) ),
         new Score( 30,  1, new ScoreDate( 12,  3, 10 ) ),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
-        new Score(),
+        new Score( 27,  2, new ScoreDate(  5,  8, 12 ) ),
+        new Score( 23,  1, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 21,  1, new ScoreDate(  8,  8, 12 ) ),
+        new Score( 20,  2, new ScoreDate(  6,  8, 12 ) ),
+        new Score( 19,  3, new ScoreDate(  7,  8, 12 ) ),
     };
 
     static final Score[] getInitialScoresTotalBiggest()

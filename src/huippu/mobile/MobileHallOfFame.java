@@ -13,6 +13,7 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.Screen;
 import javax.microedition.lcdui.StringItem;
 import javax.microedition.rms.RecordStore;
@@ -27,6 +28,7 @@ final class MobileHallOfFame extends HallOfFame
         new Command( Resources.TEXT_RESET_HOF, Command.SCREEN, 2 );
     
     private final MobileDrome mDrome;
+    private final int mRankWidth;
     private final int mScoreWidth;
     private final int mLevelWidth;
     private Form mForm;
@@ -36,6 +38,7 @@ final class MobileHallOfFame extends HallOfFame
         super();
         mDrome = pDrome;
         final int charWidth = pFont.charWidth( '0' );
+        mRankWidth = 3 * charWidth;
         mScoreWidth = 5 * charWidth;
         mLevelWidth = 3 * charWidth;
         readFromStore();
@@ -246,15 +249,18 @@ final class MobileHallOfFame extends HallOfFame
     
     private final void addItem( final String pRank, final Score pScore )
     {
+        final String prefix = ( pRank.length() == 1 ? " " : "" );
+        final StringItem rankItem = new StringItem( null, prefix + pRank + ":" );
+        rankItem.setPreferredSize( mRankWidth, -1 );
+        mForm.append( rankItem );
+
         final int value = pScore.getValue();
         if ( value == 0 )
         {
-            mForm.append( pRank + ":\n" );
+            mForm.append( "\n" );
         }
         else
         {
-            mForm.append( pRank + ":" );
-            
             final StringItem valueItem =
                 new StringItem( null, String.valueOf( value ) );
             valueItem.setPreferredSize( mScoreWidth, -1 );
